@@ -1,6 +1,7 @@
 package uk.co.transputersystems.transputer.assembler;
 
 import uk.co.transputersystems.transputer.assembler.config.AssemblerConfig;
+import uk.co.transputersystems.transputer.assembler.config.Connection;
 import uk.co.transputersystems.transputer.assembler.config.IOPin;
 import uk.co.transputersystems.transputer.assembler.expression.ExpressionEvaluator;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -135,7 +136,7 @@ public class Assembler {
     /**
      * Convert an assembly file into object code.
      */
-    public static List<String> assemble(@Nonnull String input, @Nullable AssemblerConfig config, @Nonnull PrintStream logger) {
+    public static List<String> assemble(@Nonnull String input, @Nullable AssemblerConfig config, @Nonnull PrintStream logger) throws DuplicateLabelException {
         List<Instruction> assembly = parseAssembly(input);
 
         logger.println("== Assembly ==");
@@ -154,15 +155,17 @@ public class Assembler {
 
         Assembly labelMappedAssembly = makeLabelMap(dataDirectivesProcessedAssembly);
 
+        Assembly configLabelMappedAssembly = completeLabelMap(labelMappedAssembly, config);
+
         logger.println("== Label map ==");
-        for (Map.Entry<String, Long> entry : labelMappedAssembly.labelMap.entrySet()) {
+        for (Map.Entry<String, Long> entry : configLabelMappedAssembly.labelMap.entrySet()) {
             logger.printf("%s : %s%n", entry.getKey(), entry.getValue());
         }
 
         logger.println("== Assembly: label map built ==");
-        logger.println(labelMappedAssembly.instructions);
+        logger.println(configLabelMappedAssembly.instructions);
 
-        Assembly patchedLabelAssembly = patchLabels(labelMappedAssembly);
+        Assembly patchedLabelAssembly = patchLabels(configLabelMappedAssembly);
 
         logger.println("== Label map: patched ==");
         for (Map.Entry<String, Long> entry : patchedLabelAssembly.labelMap.entrySet()) {
@@ -403,6 +406,31 @@ public class Assembler {
         }
 
         return new Assembly(updatedAssembly, labelMap);
+    }
+
+    /**
+     * Extract the channel-label pairs from the config and add them to the label map.
+     */
+    public static Assembly completeLabelMap(Assembly labelMappedAssembly, AssemblerConfig config) throws DuplicateLabelException {
+        Map<String, Long> updatedLabelMap = new LinkedHashMap<>(labelMappedAssembly.labelMap);
+
+        for (Connection connection : config.getProcessor().getConnections()) {
+            if (updatedLabelMap.containsKey(connection.getChannel())) {
+                throw new DuplicateLabelException(connection.getChannel());
+            } else {
+                updatedLabelMap.put(connection.getChannel(), (long) connection.getDest_port()); // is this right?
+            }
+        }
+
+        for (IOPin iopin : config.getProcessor().getIopins()) {
+            if (updatedLabelMap.containsKey(iopin.getChannel())) {
+                throw new DuplicateLabelException(iopin.getChannel());
+            } else {
+                updatedLabelMap.put(iopin.getChannel(), (long) iopin.getAddr());
+            }
+        }
+
+        return new Assembly(labelMappedAssembly.instructions, updatedLabelMap);
     }
 
     /**

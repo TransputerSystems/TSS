@@ -2,6 +2,7 @@ package uk.co.transputersystems.transputer.assembler.expression;
 
 import uk.co.transputersystems.transputer.assembler.AssemblerExpressionBaseVisitor;
 import uk.co.transputersystems.transputer.assembler.AssemblerExpressionParser;
+import uk.co.transputersystems.transputer.assembler.LabelNotFoundException;
 
 import java.util.Map;
 
@@ -44,6 +45,11 @@ public class ExpressionEvaluator extends AssemblerExpressionBaseVisitor<Long> {
 
     @Override
     public Long visitLabelExp(AssemblerExpressionParser.LabelExpContext ctx) {
-        return labelMap.get(ctx.getText());
+        Long result = labelMap.get(ctx.getText());
+        if (result == null) {
+            throw new LabelNotFoundException(ctx.getText());
+        } else {
+            return result;
+        }
     }
 }
