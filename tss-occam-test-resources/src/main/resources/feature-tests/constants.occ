@@ -1,0 +1,15 @@
+-- prereq - assignment, constant loading
+-- Goal
+-- Correctly load large and small constants
+PROC init()
+    INT a:
+    SEQ
+        a := 0
+        a := 1234
+        a := 2218598
+        a := 123572837
+        a := -10
+        a := -4738
+        a := -1183743
+        a := -127348273
+:

@@ -1,0 +1,12 @@
+PROC init ()
+    INT x, y:
+    SEQ
+        six(x+1)
+        x := 4
+        y := (x + 1)
+        CHAN OF INT c:
+        PAR
+            some.procedure (x, y, c)
+            another.procedure (c)
+        y := 5
+:

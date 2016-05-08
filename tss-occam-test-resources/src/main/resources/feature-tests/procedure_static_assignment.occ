@@ -1,0 +1,16 @@
+--prereq proc_argument , declaration
+--Goals to assign a static variable to a procedure]
+
+PROC init()
+    INT step:
+    SEQ
+        step := 39
+        PROC next.item(INT next, VAL INT this)
+            next := this + step
+        :
+        INT g, step:
+        SEQ
+            step := 7
+            next.item(g, 3)
+            --g should have value 42
+:

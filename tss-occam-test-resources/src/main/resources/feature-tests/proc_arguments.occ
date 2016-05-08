@@ -1,0 +1,14 @@
+--Goal
+--Correctly handle a process with arguments
+PROC a(VAL INT a, INT b)
+    SEQ
+        b := a
+:
+
+
+PROC init()
+    INT my.int:
+    SEQ
+        my.int := 2
+        a(0, my.int)
+:

@@ -1,0 +1,25 @@
+INT global1,global2:
+
+PROC init ()
+    INT a,b,c,x:
+    SEQ
+      global1 := 10
+      global2 := 11
+      PAR
+          INT y,z:
+          SEQ
+              a := 4
+              y := x
+              z := y
+          INT y,z:
+          SEQ
+              b := 5
+              y := x
+              z := y
+          INT w,y,z:
+          SEQ
+              c := 6
+              y := x
+              z := y
+              w := z
+:

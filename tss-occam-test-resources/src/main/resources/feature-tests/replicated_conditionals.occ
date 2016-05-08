@@ -1,0 +1,13 @@
+--prereq conditionals , replicators , conditional
+--Goal
+--Correctly handle replicated conditionals
+PROC init()
+    INT u , v:
+    IF
+        u <= v
+            IF i = 2 FOR 10
+                i = 10
+                    SKIP
+        TRUE
+            SKIP
+:

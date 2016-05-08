@@ -1,0 +1,14 @@
+INT FUNCTION test ()
+    INT a:
+    VALOF
+        SEQ
+            a := 10
+        RESULT a
+:
+
+
+PROC init()
+    INT a :
+    SEQ
+        a := test()
+:

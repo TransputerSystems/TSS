@@ -1,0 +1,8 @@
+PROC init()
+  SEQ
+    SKIP
+    PAR
+      SKIP
+      SKIP
+    SKIP
+:

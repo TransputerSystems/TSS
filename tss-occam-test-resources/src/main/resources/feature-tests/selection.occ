@@ -1,0 +1,15 @@
+-- prereq - declaration
+-- Goal
+-- Handle selection
+PROC init()
+  INT a,b,c:
+  SEQ
+    a := 2
+    CASE a
+      3
+        c := 1
+      4
+        c := 2
+      ELSE
+        c := 3
+:

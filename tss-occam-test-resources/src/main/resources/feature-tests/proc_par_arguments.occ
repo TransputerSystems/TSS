@@ -1,0 +1,14 @@
+--Goal
+--Correctly handle a process with arguments
+PROC a(INT a, INT b)
+    PAR
+        SKIP
+        SKIP
+:
+
+
+PROC init()
+    PAR
+        a(0,0)
+        b(1,1)
+:

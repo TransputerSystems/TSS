@@ -1,0 +1,8 @@
+PROC writer (CHAN OF INT out)
+  SEQ
+    out ! clear.screen
+    SEQ i = 0 FOR 10
+      out ! int.x.y; 1; (BYTE i) + 1; i
+    VAL []BYTE str IS "hello, new world!":
+    out ! string.x.y; 1; 11; (SIZE str)::str
+:

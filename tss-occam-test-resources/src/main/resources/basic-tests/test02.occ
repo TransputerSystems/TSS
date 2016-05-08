@@ -1,0 +1,6 @@
+PROC init ()
+    INT x, y:
+    SEQ
+        x := 4
+        y := x
+:

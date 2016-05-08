@@ -1,0 +1,14 @@
+--prereq declaration, assignment
+--Goal
+--Channel declared
+--Write a value to a channel
+--Read a value from a channel
+PROC init()
+    PORT OF INT c1 :
+    INT a,b:
+    SEQ
+        a := 2
+        PAR
+            c1 ! a
+            c1 ? b
+:

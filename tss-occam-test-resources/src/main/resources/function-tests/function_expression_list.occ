@@ -1,0 +1,10 @@
+--prereq assignment
+--Goals - Declare and call a function that is an expression list
+
+BOOL FUNCTION isupper(VAL BYTE ch) IS (ch >= 'A') AND (ch <= 'Z'):
+
+PROC init()
+    BOOL upper:
+    SEQ
+        upper := isupper('Z')
+:

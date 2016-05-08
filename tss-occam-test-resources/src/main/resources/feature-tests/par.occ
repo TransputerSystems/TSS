@@ -1,0 +1,11 @@
+--Goal
+--Correctly handle parallel processes
+PROC init()
+    PAR
+        SKIP
+        SKIP
+        SKIP
+        SKIP
+        SKIP
+        SKIP
+:

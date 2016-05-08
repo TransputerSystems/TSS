@@ -1,0 +1,10 @@
+--prereq par
+--Goal
+--Correctly create replicated parallel statements
+
+PROC init()
+    PAR i = 0 FOR 4
+        PAR k = 0 FOR 10
+            SKIP
+:
+

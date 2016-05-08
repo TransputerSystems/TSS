@@ -1,0 +1,20 @@
+--prereq sequential, assignment, declaration
+--Goal
+--Correctly handle monadic expressions
+PROC init()
+    INT a,b,c,d,e,f,g,h,i,j:
+    SEQ
+        a := 2
+        b := 9
+        c := -a
+        d := MINUS a
+        e := ~a
+        f := BITNOT a
+        g := NOT a
+        --h := SIZE a -- Note: This applies to array types only
+        --h := BYTESIN a -- Note: This applies to value types only
+        i := b >> a
+        j := b << a
+        i := MOSTPOS INT
+        j := MOSTNEG INT
+:

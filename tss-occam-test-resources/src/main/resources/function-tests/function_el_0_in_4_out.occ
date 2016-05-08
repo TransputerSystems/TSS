@@ -1,0 +1,8 @@
+INT,INT,INT,INT FUNCTION test() IS 10,15,20,25:
+
+
+PROC init()
+    INT a,b,c,d:
+    SEQ
+        a,b,c,d := test()
+:

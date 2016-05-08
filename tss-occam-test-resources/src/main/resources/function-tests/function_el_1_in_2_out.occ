@@ -1,0 +1,8 @@
+INT,INT FUNCTION test(VAL INT z) IS z,10:
+
+
+PROC init()
+    INT a,b:
+    SEQ
+        a,b := test(5)
+:

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+java -jar "tss-transputer-simulator-1.0-SNAPSHOT-jfx.jar" "$@"

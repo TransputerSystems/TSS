@@ -1,0 +1,8 @@
+PROC init()
+    WHILE TRUE
+        INT v:
+        SEQ
+            SKIP
+            INT j:
+            SKIP
+:

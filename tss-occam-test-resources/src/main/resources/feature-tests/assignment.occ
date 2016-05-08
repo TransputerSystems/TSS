@@ -1,0 +1,11 @@
+--Prereq sequential
+--Goal
+--Integer variables can be assigned values
+PROC init()
+    INT a,b,c:
+    SEQ
+        a := 1
+        b := 2
+        c := 3
+        a := c
+:

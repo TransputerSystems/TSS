@@ -1,0 +1,28 @@
+--prereq record_declarations
+--Goal BYTESIN & OFFSETOF operators on a record
+
+DATA TYPE MIXED
+    PACKED RECORD
+        BYTE b1, b2:
+        INT16 i16:
+        INT i:
+:
+
+
+
+PROC init()
+    MIXED m1:
+    INT a , b , c , d , e , ob1 , ob2 , ob3:
+
+    SEQ
+        a := BYTESIN(MIXED)
+        b := BYTESIN(m1)
+        c := BYTESIN(m1[b1])
+        d := BYTESIN(m1[i16])
+        e := BYTESIN(m1[i])
+
+        ob1 := OFFSETOF(MIXED,b1)
+        ob2 := OFFSETOF(MIXED,i16)
+        ob3 := OFFSETOF(MIXED,i)
+:
+

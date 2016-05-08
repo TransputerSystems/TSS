@@ -1,0 +1,24 @@
+--prereq declaration, assignment
+--Goal
+--Alternatives
+PROC init()
+    CHAN OF INT c1, c2 :
+    INT a,b :
+    TIMER t :
+    SEQ
+        a := 2
+        ALT
+            c1 ? a
+                SEQ
+                    b := 1
+            TRUE & c2 ? a
+                SEQ
+                    b := 2
+            t ? AFTER (1000 + 2)
+                SEQ
+                    b := 3
+            TRUE & SKIP
+                SEQ
+                    b := 4
+
+:

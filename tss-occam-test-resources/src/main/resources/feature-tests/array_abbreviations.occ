@@ -1,0 +1,22 @@
+--prereq declaration, array declarations, variable abbreviations
+--Goal
+--Correctly handle abbreviation of arrays
+
+PROC initArrays()
+    INT a:
+    [2] INT pages:
+    SEQ
+        INT first IS pages[0]:
+        INT last IS pages[1]:
+        a := 1
+        first := a
+        last := 10
+
+        PAR
+            SEQ
+                INT f0:
+                f0 := first
+            SEQ
+                INT f1:
+                f1 := last
+:

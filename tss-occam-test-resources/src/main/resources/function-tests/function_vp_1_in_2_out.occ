@@ -1,0 +1,15 @@
+INT,INT FUNCTION test (VAL INT z)
+    INT a,b:
+    VALOF
+        SEQ
+            a := z
+            b := 10
+        RESULT a,b
+:
+
+
+PROC init()
+    INT a,b:
+    SEQ
+        a,b := test(5)
+:

@@ -1,0 +1,8 @@
+--Goal
+--Declare variables
+PROC init()
+    INT x,y,z:
+    PAR
+        SKIP
+        SKIP
+:

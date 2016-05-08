@@ -1,0 +1,19 @@
+-- prereq - declaration
+-- Goal
+-- Handle conditional statements
+PROC init()
+    INT a,b,c,d:
+    SEQ
+        a := 1
+        b := 2
+        c := 3
+        IF
+            a<b
+                IF
+                    c < b
+                        d := #C1DEC1DE
+                    TRUE
+                        d := #C2DEC2DE
+            TRUE
+                d := #C3DEC3DE
+:

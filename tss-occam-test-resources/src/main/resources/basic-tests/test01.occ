@@ -1,0 +1,17 @@
+PROC init ([4]BYTE x)
+    PAR
+        SKIP
+        SKIP
+        PAR
+            SKIP
+            SKIP
+        SKIP
+        SKIP
+        PAR
+            SKIP
+            SKIP
+            PAR
+                SKIP
+                SKIP
+        SKIP
+:

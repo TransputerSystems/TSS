@@ -1,0 +1,30 @@
+--Prereq : sequential, declaration
+--Goal
+--Correctlty calculate Dyadic expression
+PROC init()
+    INT a,b,c,d,e,f,g,h,i,j,k,l,m,v:
+    BOOL n,o,p,q,r,s,t,u:
+    SEQ
+        a := 1
+        b := 2
+        c := b + a
+        d := b / a
+        e := b * a
+        f := b PLUS a
+        g := b MINUS a
+        h := b TIMES a
+        i := b /\ a
+        j := b \/ a
+        k := b >< a
+        l := b BITAND a
+        m := b BITOR a
+        n := b AND a
+        o := b OR a
+        p := b = a
+        q := b <> a
+        r := b > a
+        s := b < a
+        t := b <= a
+        u := b >= a
+        v := b AFTER a
+:

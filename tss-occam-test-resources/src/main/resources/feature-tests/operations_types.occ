@@ -1,0 +1,21 @@
+--prereq
+--Goals
+--SIZEOF
+--MOSTPOS
+
+PROC init()
+    INT a:
+    SEQ
+        
+        a := MOSTPOS INT16
+        a := MOSTPOS INT32
+        a := MOSTPOS INT64
+        a := MOSTPOS BYTE
+
+        a := MOSTNEG INT16
+        a := MOSTNEG INT32
+        a := MOSTNEG INT64
+        a := MOSTNEG BYTE
+
+:
+

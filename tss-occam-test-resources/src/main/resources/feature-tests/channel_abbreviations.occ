@@ -1,0 +1,12 @@
+--prereq declaration
+--Goal
+--Correctly handle abbreviation of channels
+
+PROC init()
+    CHAN OF INT a:
+    SEQ
+        b IS a:
+        b ! 5
+        CHAN OF BYTE c IS b:
+        c ! 10
+:

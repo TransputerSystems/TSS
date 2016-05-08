@@ -1,0 +1,20 @@
+INT,INT,INT,INT FUNCTION test (VAL INT z, VAL INT y, VAL INT x, VAL INT w)
+    INT a,b,c,d:
+    VALOF
+        SEQ
+            a := z
+            b := y
+            c := 60
+            d := w
+        RESULT a,b,c,d
+:
+
+
+PROC init()
+    INT a,b,c,d,e:
+    SEQ
+        a,b,c,d := test(5,10,15,20)
+        e := a
+        a := c
+        c := e
+:

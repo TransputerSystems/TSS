@@ -1,0 +1,15 @@
+PROC init()
+    INT t,u , p  :
+    SEQ
+        IF
+            TRUE AND (((t > u) OR (t < u)) AND (t < u))
+                IF
+                    u > p
+                        SKIP
+                    u > p
+                        SKIP
+            t > u
+                SKIP
+
+
+:

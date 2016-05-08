@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# JAVA_HOME must be set the the location of the Java 8 JDK
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+
+# run the maven script using the above JAVA_HOME
+./mvnw $@

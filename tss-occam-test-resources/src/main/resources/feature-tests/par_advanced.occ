@@ -1,0 +1,24 @@
+--Goal
+--Correctly handle parallel processes
+PROC init()
+    PAR
+        INT a,b,c:
+        SEQ
+          a:=2
+          b:=1
+          c:=3
+        INT d,e,f:
+        SEQ
+          d:=2
+          e:=1
+          f:=0
+          PAR
+            SKIP
+            INT h,i:
+            CHAN OF INT c :
+            SEQ
+              h:=2
+              i:=1
+              i:=h
+
+:

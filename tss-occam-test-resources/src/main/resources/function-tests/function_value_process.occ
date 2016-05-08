@@ -1,0 +1,20 @@
+--prereq assignment
+--Goals - Declare and call a function that is a value process
+
+INT FUNCTION increase (VAL INT a)
+    INT b:
+    VALOF
+        SEQ
+            b := 10
+            b := a * (b+2)
+
+        RESULT b
+:
+
+
+PROC init()
+    INT v,o :
+    SEQ
+        v := 5
+        o := increase(v)
+:

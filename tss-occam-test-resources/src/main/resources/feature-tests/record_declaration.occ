@@ -1,0 +1,16 @@
+--preq declaration
+--Goal
+--Correctly declare a record data structure
+DATA TYPE RECTANGLE
+    RECORD
+        INT width, height:
+:
+DATA TYPE HEATER
+    RECORD
+        RECTANGLE size:
+        INT power:
+:
+
+PROC init()
+    SKIP
+:

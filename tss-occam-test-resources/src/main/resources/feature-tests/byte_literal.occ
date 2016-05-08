@@ -1,0 +1,10 @@
+--Goal
+--Correctly handle various types of byte literal
+PROC init()
+    BYTE a, b, c, d:
+    SEQ
+        a := '*#7F'
+        b := '*T'
+        c := '*''
+        d := '**'
+:

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>eu.rossng.occam.metadata.LibraryInformation</OriginalElement>
+  <nodes>
+    <node x="516.1761111111111" y="200.0">eu.rossng.occam.metadata.DataType</node>
+    <node x="402.71777777777777" y="0.0">eu.rossng.occam.metadata.Abbreviation</node>
+    <node x="502.1761111111111" y="280.0">eu.rossng.occam.metadata.ArrayDataType</node>
+    <node x="882.7066666666668" y="0.0">eu.rossng.occam.metadata.Channel</node>
+    <node x="806.75" y="200.0">eu.rossng.occam.metadata.Function</node>
+    <node x="151.0000000000001" y="120.0">eu.rossng.occam.metadata.ArrayAbbreviation</node>
+    <node x="1064.706666666667" y="0.0">eu.rossng.occam.metadata.Port</node>
+    <node x="301.00000000000006" y="120.0">eu.rossng.occam.metadata.ChannelAbbreviation</node>
+    <node x="856.1233333333336" y="530.0">eu.rossng.occam.Test</node>
+    <node x="631.0" y="120.0">eu.rossng.occam.metadata.TimerAbbreviation</node>
+    <node x="467.00000000000006" y="120.0">eu.rossng.occam.metadata.VariableAbbreviation</node>
+    <node x="791.2083333333334" y="450.0">eu.rossng.occam.TSILGenerator</node>
+    <node x="894.3333333333334" y="120.0">eu.rossng.occam.metadata.Scope</node>
+    <node x="230.67611111111108" y="200.0">eu.rossng.occam.metadata.Field</node>
+    <node x="980.7066666666668" y="0.0">eu.rossng.occam.metadata.Timer</node>
+    <node x="808.9583333333334" y="370.0">eu.rossng.occam.metadata.LibraryInformation</node>
+    <node x="783.1761111111111" y="280.0">eu.rossng.occam.metadata.FileInformation</node>
+    <node x="220.17611111111108" y="280.0">eu.rossng.occam.metadata.RecordDataType</node>
+    <node x="704.75" y="0.0">eu.rossng.occam.metadata.Variable</node>
+    <node x="633.1761111111111" y="280.0">eu.rossng.occam.metadata.PrimitiveDataType</node>
+    <node x="783.0" y="120.0">eu.rossng.occam.metadata.Argument</node>
+    <node x="0.0" y="120.0">eu.rossng.occam.metadata.ValueAbbreviation</node>
+    <node x="360.1761111111111" y="280.0">eu.rossng.occam.metadata.NamedDataType</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="eu.rossng.occam.metadata.LibraryInformation" target="eu.rossng.occam.metadata.FileInformation">
+      <point x="-55.41666666666663" y="-15.0" />
+      <point x="820.0416666666667" y="350.0" />
+      <point x="802.3427777777777" y="350.0" />
+      <point x="-38.33333333333337" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.Scope" target="eu.rossng.occam.metadata.Variable">
+      <point x="-22.0" y="-15.0" />
+      <point x="905.3333333333334" y="70.0" />
+      <point x="723.75" y="70.0" />
+      <point x="-19.0" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.ValueAbbreviation" target="eu.rossng.occam.metadata.Abbreviation">
+      <point x="0.0" y="-15.0" />
+      <point x="65.5" y="80.0" />
+      <point x="411.21777777777777" y="80.0" />
+      <point x="-42.5" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.Scope" target="eu.rossng.occam.metadata.Channel">
+      <point x="-7.333333333333371" y="-15.0" />
+      <point x="920.0" y="50.0" />
+      <point x="902.2066666666668" y="50.0" />
+      <point x="-19.5" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.NamedDataType" target="eu.rossng.occam.metadata.DataType">
+      <point x="0.0" y="-15.0" />
+      <point x="421.1761111111111" y="260.0" />
+      <point x="541.076111111111" y="260.0" />
+      <point x="-16.600000000000023" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.TSILGenerator" target="eu.rossng.occam.metadata.LibraryInformation">
+      <point x="0.0" y="-15.0" />
+      <point x="844.7083333333334" y="425.0" />
+      <point x="842.2083333333334" y="425.0" />
+      <point x="-33.25" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.LibraryInformation" target="eu.rossng.occam.metadata.Function">
+      <point x="11.083333333333371" y="-15.0" />
+      <point x="886.5416666666667" y="330.0" />
+      <point x="908.6761111111111" y="330.0" />
+      <point x="908.6761111111111" y="250.0" />
+      <point x="867.5" y="250.0" />
+      <point x="20.25" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.PrimitiveDataType" target="eu.rossng.occam.metadata.DataType">
+      <point x="0.0" y="-15.0" />
+      <point x="698.1761111111111" y="260.0" />
+      <point x="574.276111111111" y="260.0" />
+      <point x="16.600000000000023" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.Scope" target="eu.rossng.occam.metadata.Port">
+      <point x="29.33333333333337" y="-15.0" />
+      <point x="956.6666666666667" y="100.0" />
+      <point x="1106.706666666667" y="100.0" />
+      <point x="14.0" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.TimerAbbreviation" target="eu.rossng.occam.metadata.Abbreviation">
+      <point x="0.0" y="-15.0" />
+      <point x="697.0" y="90.0" />
+      <point x="479.21777777777777" y="90.0" />
+      <point x="25.5" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.VariableAbbreviation" target="eu.rossng.occam.metadata.Abbreviation">
+      <point x="0.0" y="-15.0" />
+      <point x="539.0" y="100.0" />
+      <point x="462.21777777777777" y="100.0" />
+      <point x="8.5" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.ArrayDataType" target="eu.rossng.occam.metadata.DataType">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.Test" target="eu.rossng.occam.TSILGenerator">
+      <point x="-13.75" y="-15.0" />
+      <point x="869.8733333333336" y="505.0" />
+      <point x="844.7083333333334" y="505.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.LibraryInformation" target="eu.rossng.occam.metadata.Scope">
+      <point x="33.25" y="-15.0" />
+      <point x="908.7083333333334" y="340.0" />
+      <point x="938.3333333333334" y="340.0" />
+      <point x="938.3333333333334" y="175.0" />
+      <point x="935.5833333333334" y="175.0" />
+      <point x="8.25" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.Scope" target="eu.rossng.occam.metadata.Timer">
+      <point x="14.666666666666629" y="-15.0" />
+      <point x="942.0" y="80.0" />
+      <point x="1028.706666666667" y="80.0" />
+      <point x="16.0" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.FileInformation" target="eu.rossng.occam.metadata.Function">
+      <point x="0.0" y="-15.0" />
+      <point x="840.6761111111111" y="260.0" />
+      <point x="827.0" y="260.0" />
+      <point x="-20.25" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.RecordDataType" target="eu.rossng.occam.metadata.Field">
+      <point x="0.0" y="-15.0" />
+      <point x="280.1761111111111" y="260.0" />
+      <point x="274.9261111111111" y="260.0" />
+      <point x="14.75" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.Function" target="eu.rossng.occam.metadata.Argument">
+      <point x="-20.25" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.Function" target="eu.rossng.occam.metadata.Scope">
+      <point x="20.25" y="-15.0" />
+      <point x="867.5" y="175.0" />
+      <point x="902.5833333333334" y="175.0" />
+      <point x="-24.75" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.ChannelAbbreviation" target="eu.rossng.occam.metadata.Abbreviation">
+      <point x="0.0" y="-15.0" />
+      <point x="374.00000000000006" y="100.0" />
+      <point x="445.21777777777777" y="100.0" />
+      <point x="-8.5" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.Scope" target="eu.rossng.occam.metadata.Abbreviation">
+      <point x="-29.333333333333258" y="-15.0" />
+      <point x="898.0000000000001" y="80.0" />
+      <point x="496.21777777777777" y="80.0" />
+      <point x="42.5" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.ArrayAbbreviation" target="eu.rossng.occam.metadata.Abbreviation">
+      <point x="0.0" y="-15.0" />
+      <point x="216.0000000000001" y="90.0" />
+      <point x="428.21777777777777" y="90.0" />
+      <point x="-25.5" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.RecordDataType" target="eu.rossng.occam.metadata.DataType">
+      <point x="40.0" y="-15.0" />
+      <point x="320.1761111111111" y="250.0" />
+      <point x="524.4761111111111" y="250.0" />
+      <point x="-33.200000000000045" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.Test" target="eu.rossng.occam.metadata.LibraryInformation">
+      <point x="13.75" y="-15.0" />
+      <point x="897.3733333333336" y="505.0" />
+      <point x="908.7083333333334" y="505.0" />
+      <point x="33.25" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.FileInformation" target="eu.rossng.occam.metadata.DataType">
+      <point x="-38.33333333333337" y="-15.0" />
+      <point x="802.3427777777777" y="250.0" />
+      <point x="590.8761111111112" y="250.0" />
+      <point x="33.200000000000045" y="15.0" />
+    </edge>
+    <edge source="eu.rossng.occam.metadata.FileInformation" target="eu.rossng.occam.metadata.Scope">
+      <point x="38.33333333333337" y="-15.0" />
+      <point x="879.0094444444444" y="260.0" />
+      <point x="915.7277777777779" y="260.0" />
+      <point x="915.7277777777779" y="175.0" />
+      <point x="919.0833333333334" y="175.0" />
+      <point x="-8.25" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.9293103448275862" x="560.5" y="280.0" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+

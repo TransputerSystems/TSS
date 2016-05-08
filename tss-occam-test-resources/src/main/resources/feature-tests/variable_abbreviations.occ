@@ -1,0 +1,19 @@
+--prereq declaration
+--Goal
+--Correctly handle abbreviation of variables
+
+PROC init()
+    INT a:
+    BOOL x:
+    b IS a:
+    SEQ
+        b := 1
+        x := TRUE
+        INT y IS x:
+        BOOL c:
+        SEQ
+            y := 1
+            VAL BOOL z IS y + b:
+            c := z
+            y := 0
+:

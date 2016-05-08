@@ -1,0 +1,20 @@
+-- prereq declaration, assignment
+--Goal
+--Correctly handle a while loop and a nested whi
+PROC init()
+    INT a, b, c, d:
+    SEQ
+        a := 1
+        b := 10
+        d := 1
+
+        WHILE b < (d + 1)
+            SEQ
+                a := a + 1
+                c := a
+                d := 1
+                WHILE d < b
+                    SEQ
+                        SKIP
+                        d := d + 1
+:

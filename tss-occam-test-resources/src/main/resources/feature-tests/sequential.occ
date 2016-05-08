@@ -1,0 +1,16 @@
+--Goal
+--Correctly handle sequential statements
+PROC init()
+    PAR
+        SEQ
+            SKIP
+            SKIP
+            SEQ
+                PAR
+                    SKIP
+                    SKIP
+                SKIP
+        SEQ
+            SKIP
+            SKIP
+:

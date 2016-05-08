@@ -1,0 +1,7 @@
+PROC test0 ()
+  [2]INT a:
+  [2]INT c:
+  SEQ
+    c[0] := -a
+    check.INT (c[1],2,"test0")
+:

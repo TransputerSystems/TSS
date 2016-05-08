@@ -1,0 +1,11 @@
+--prereq monadic expressions
+--Goal
+--Correctly swap variables a,b := b,c
+--Handle nested expressions
+PROC init()
+    INT a,b,c,d,e :
+    SEQ
+        a,b,c,d,e := 1,2,3,4,5
+        a, b := b , a
+        a := b + (( (c / d) * (a + b)) + 2  )
+:
