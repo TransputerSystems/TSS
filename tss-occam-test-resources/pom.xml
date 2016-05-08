@@ -31,6 +31,8 @@
                         <configuration>
                             <includes>
                                 <include>**/*.occ</include>
+                                <include>**/*.yaml</include>
+                                <include>**/*.s</include>
                             </includes>
                         </configuration>
                     </execution>

@@ -1,0 +1,10 @@
+processor:
+    processor_id: 0
+    connections:
+        - target_processor: 1
+          dest_port: 0
+          channel: channel0
+    iopins:
+        - addr: 70
+          channel: sensor
+          config: 0

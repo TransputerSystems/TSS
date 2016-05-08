@@ -155,17 +155,19 @@ public class Assembler {
 
         Assembly labelMappedAssembly = makeLabelMap(dataDirectivesProcessedAssembly);
 
-        Assembly configLabelMappedAssembly = completeLabelMap(labelMappedAssembly, config);
+        if (config != null) {
+            labelMappedAssembly = addConfigToLabelMap(labelMappedAssembly, config);
+        }
 
         logger.println("== Label map ==");
-        for (Map.Entry<String, Long> entry : configLabelMappedAssembly.labelMap.entrySet()) {
+        for (Map.Entry<String, Long> entry : labelMappedAssembly.labelMap.entrySet()) {
             logger.printf("%s : %s%n", entry.getKey(), entry.getValue());
         }
 
         logger.println("== Assembly: label map built ==");
-        logger.println(configLabelMappedAssembly.instructions);
+        logger.println(labelMappedAssembly.instructions);
 
-        Assembly patchedLabelAssembly = patchLabels(configLabelMappedAssembly);
+        Assembly patchedLabelAssembly = patchLabels(labelMappedAssembly);
 
         logger.println("== Label map: patched ==");
         for (Map.Entry<String, Long> entry : patchedLabelAssembly.labelMap.entrySet()) {
@@ -411,7 +413,7 @@ public class Assembler {
     /**
      * Extract the channel-label pairs from the config and add them to the label map.
      */
-    public static Assembly completeLabelMap(Assembly labelMappedAssembly, AssemblerConfig config) throws DuplicateLabelException {
+    public static Assembly addConfigToLabelMap(@Nonnull Assembly labelMappedAssembly, @Nonnull AssemblerConfig config) throws DuplicateLabelException {
         Map<String, Long> updatedLabelMap = new LinkedHashMap<>(labelMappedAssembly.labelMap);
 
         for (Connection connection : config.getProcessor().getConnections()) {
