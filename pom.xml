@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>uk.co.transputersystems</groupId>
+    <artifactId>tss-toolchain</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>tss-occam-compiler</module>
+        <module>tss-occam-compiler-test</module>
+        <module>tss-occam-test-resources</module>
+        <module>tss-transputer-assembler</module>
+        <module>tss-transputer-assembler-test</module>
+        <module>tss-transputer-simulator</module>
+        <module>tss-transputer-simulator-test</module>
+        <module>tss-transputer-utils</module>
+    </modules>
+
+    <developers>
+        <developer>
+            <id>rossng</id>
+            <name>Ross Gardiner</name>
+            <email>ross-public@gmx.com</email>
+            <url>http://www.rossgardiner.co.uk/</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/London</timezone>
+        </developer>
+        <developer>
+            <id>rossng</id>
+            <name>Ross Gardiner</name>
+            <email>ross-public@gmx.com</email>
+            <url>http://www.rossgardiner.co.uk/</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/London</timezone>
+        </developer>
+        <developer>
+            <id>EdNutting</id>
+            <name>Edward Nutting</name>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/London</timezone>
+        </developer>
+        <developer>
+            <id>sammhicks</id>
+            <name>Samuel Hicks</name>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/London</timezone>
+        </developer>
+        <developer>
+            <id>jgbdev</id>
+            <name>John Griffith</name>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/London</timezone>
+        </developer>
+    </developers>
+
+</project>
