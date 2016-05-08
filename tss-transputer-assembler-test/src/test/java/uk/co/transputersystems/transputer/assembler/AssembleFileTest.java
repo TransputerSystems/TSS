@@ -187,6 +187,13 @@ public class AssembleFileTest {
     }
 
     @Test
+    public void testPorts() throws Exception {
+        String path = "/feature-tests/port.occ";
+        File asmFile = testCompilingFile(getResource(path), path, "port.occ");
+        assertTrue(testAssemblingFile(asmFile));
+    }
+
+    @Test
     public void testConditionals() throws Exception {
         String path = "/feature-tests/conditional.occ";
 		File asmFile = testCompilingFile(getResource(path), path, "conditional.occ");

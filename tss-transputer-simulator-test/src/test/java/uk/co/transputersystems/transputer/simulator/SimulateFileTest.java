@@ -204,6 +204,14 @@ public class SimulateFileTest {
     }
 
     @Test
+    public void testPorts() throws Exception {
+        String path = "/feature-tests/port.occ";
+        File asmFile = testCompilingFile(getResource(path), path, "port.occ");
+        File objectFile = testAssemblingFile(asmFile);
+        assertTrue(testSimulatingFile(Collections.singletonList(objectFile)));
+    }
+
+    @Test
     public void testConditionals() throws Exception {
         String path = "/feature-tests/conditional.occ";
 		File asmFile = testCompilingFile(getResource(path), path, "conditional.occ");

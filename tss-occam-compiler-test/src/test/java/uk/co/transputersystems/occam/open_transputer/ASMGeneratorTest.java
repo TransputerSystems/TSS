@@ -140,6 +140,12 @@ public class ASMGeneratorTest {
     }
 
     @Test
+    public void testPorts() throws Exception {
+        String path = "/feature-tests/port.occ";
+        assertTrue(testCompilingFile(getResource(path), path, "port.occ"));
+    }
+
+    @Test
     public void testConditionals() throws Exception {
         String path = "/feature-tests/conditional.occ";
         assertTrue(testCompilingFile(getResource(path), path, "conditional.occ"));

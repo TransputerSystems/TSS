@@ -110,6 +110,12 @@ public class TSILGeneratorTest {
     }
 
     @Test
+    public void testPorts() {
+        String path = "/feature-tests/port.occ";
+        assertTrue(testCompilingFile(getResource(path), path, "port.occ"));
+    }
+
+    @Test
     public void testConditionals() {
         String path = "/feature-tests/conditional.occ";
 		assertTrue(testCompilingFile(getResource(path), path, "conditional.occ"));
