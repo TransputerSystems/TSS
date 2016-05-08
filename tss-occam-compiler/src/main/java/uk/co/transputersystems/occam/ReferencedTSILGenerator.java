@@ -236,7 +236,7 @@ public class ReferencedTSILGenerator<TIdentifier> extends ILOpVisitor<ILOp<Integ
 
     @Override
     public ILOp<Integer> visitLoadPortRef(LoadPortRef<TIdentifier> op, ILBlock<TIdentifier, ? extends ILOp<TIdentifier>> ctx) {
-        return new LoadPortRef<>(ctx.getOffset(op) , op.index , op.getComment());
+        return new LoadPortRef<>(ctx.getOffset(op) , op.index, op.name, op.typeName , op.getComment());
     }
 
     @Override

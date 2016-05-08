@@ -204,6 +204,9 @@ public class Workspace {
         }
         return -1;
     }
+    public int getNthTemporaryOffset(int n) {
+        return  (maxNumTemporaries - n) + 1;
+    }
 
     public Workspace getOwner(int itemIndex) {
         for (WorkspaceLocation wsl : locations) {

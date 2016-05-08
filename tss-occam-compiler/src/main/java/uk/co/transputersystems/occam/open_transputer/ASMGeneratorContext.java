@@ -33,7 +33,7 @@ public class ASMGeneratorContext<TIdentifier, TILOp extends ILOp<? extends TIden
     public Stack<Integer> initProcesses_ExpandedSizes = new Stack<>();
     public Stack<Integer> initProcesses_ContinueOpIds = new Stack<>();
 
-    public Map<Integer,Map<Integer,Map.Entry<String,String>>> channelMappings = new HashMap<>();
+    public Map<Function, Map<Integer,Map<Integer,Map.Entry<String,String>>>> channelMappings = new HashMap<>();
 
     public ASMGeneratorContext(LibraryInformation libraryInformation) throws Exception {
         this.libraryInformation = libraryInformation;
@@ -62,8 +62,11 @@ public class ASMGeneratorContext<TIdentifier, TILOp extends ILOp<? extends TIden
     public void setCurrentFunction(Function value) {
         currentFunction = value;
         currentWorkspace = currentFunction.getWorkspace();
-        channelMappings.clear();
-        channelMappings.put(currentFunction.getWorkspace().getId(), new HashMap<>());
+        if (!channelMappings.containsKey(value)) {
+            Map<Integer, Map<Integer,Map.Entry<String,String>>> funcMap = new HashMap<>();
+            funcMap.put(currentFunction.getWorkspace().getId(), new HashMap<>());
+            channelMappings.put(value, funcMap);
+        }
         stackBranches = new ArrayList<>();
         currentStackBranch = new StackBranch();
         stackBranches.add(currentStackBranch);
@@ -82,7 +85,7 @@ public class ASMGeneratorContext<TIdentifier, TILOp extends ILOp<? extends TIden
     }
     public void addWorkspaceTransition(TIdentifier targetId, Integer newWorkspaceId) {
         workspaceTransitionPoints.put(targetId, newWorkspaceId);
-        channelMappings.put(newWorkspaceId, new HashMap<>());
+        channelMappings.get(currentFunction).put(newWorkspaceId, new HashMap<>());
     }
 
     public void checkForWorkspaceTransition(TILOp op) {
@@ -92,11 +95,18 @@ public class ASMGeneratorContext<TIdentifier, TILOp extends ILOp<? extends TIden
         }
     }
 
-    public void setChannel(Integer index, String name, String typeName) {
-        channelMappings.get(currentWorkspace.getId()).put(index, new AbstractMap.SimpleImmutableEntry<>(name,typeName));
+    public void addChannel(Integer index, String name, String typeName) {
+        channelMappings.get(currentFunction).get(currentWorkspace.getId()).put(index, new AbstractMap.SimpleImmutableEntry<>(name,typeName));
+    }
+    public int getChannelOffset(Integer index) {
+        List<Integer> keys = Arrays.asList(channelMappings.get(currentFunction).get(currentWorkspace.getId())
+                .keySet()
+                .toArray(new Integer[0]));
+        keys.sort((x, y) -> x.compareTo(y));
+        return keys.indexOf(index);
     }
     public Map.Entry<String,String> getChannel(Integer index) {
-        return channelMappings.get(currentWorkspace.getId()).get(index);
+        return channelMappings.get(currentFunction).get(currentWorkspace.getId()).get(index);
     }
 
     public void updateCurrentStackBranch(int currentPosition) {

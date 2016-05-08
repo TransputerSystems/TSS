@@ -187,8 +187,8 @@ public class ASMGenerator {
             asmOps = processEndProcess((EndProcess) ilOp, context, preProcess);
         } else if (ilOp instanceof InitAlt) {
             asmOps = processInitAlt((InitAlt) ilOp, context, preProcess);
-        /*} else if (ilOp instanceof InitChannel) {
-            asmOps = processInitChannel((InitChannel) ilOp, context, preProcess);*/
+        } else if (ilOp instanceof InitChannel) {
+            asmOps = processInitChannel((InitChannel) ilOp, context, preProcess);
         } else if (ilOp instanceof InitProcesses) {
             asmOps = processInitProcesses((InitProcesses) ilOp, context, preProcess);
         } else if (ilOp instanceof uk.co.transputersystems.occam.il.Label) {
@@ -197,16 +197,16 @@ public class ASMGenerator {
             asmOps = processLeftShift((LeftShift) ilOp, context, preProcess);
         } else if (ilOp instanceof LoadArgument) {
             asmOps = processLoadArgument((LoadArgument) ilOp, context, preProcess);
-        /*} else if (ilOp instanceof LoadChannelRef) {
-            asmOps = processLoadChannelRef((LoadChannelRef) ilOp, context, preProcess);*/
+        } else if (ilOp instanceof LoadChannelRef) {
+            asmOps = processLoadChannelRef((LoadChannelRef) ilOp, context, preProcess);
         } else if (ilOp instanceof LoadConstant) {
             asmOps = processLoadConstant((LoadConstant) ilOp, context, preProcess);
         } else if (ilOp instanceof LoadGlobal) {
             asmOps = processLoadGlobal((LoadGlobal) ilOp, context, preProcess);
         } else if (ilOp instanceof LoadLocal) {
             asmOps = processLoadLocal((LoadLocal) ilOp, context, preProcess);
-        /*} else if (ilOp instanceof LoadPortRef) {
-            asmOps = processLoadPortRef((LoadPortRef) ilOp, context, preProcess);*/
+        } else if (ilOp instanceof LoadPortRef) {
+            asmOps = processLoadPortRef((LoadPortRef) ilOp, context, preProcess);
         } else if (ilOp instanceof MethodEnd) {
             asmOps = processMethodEnd((MethodEnd) ilOp, context, preProcess);
         } else if (ilOp instanceof MethodStart) {
@@ -1424,6 +1424,7 @@ public class ASMGenerator {
         return result;
     }
 
+
     private List<ASMOp> processBooleanAnd(BooleanAnd<Integer> op, ASMGeneratorContext<Integer, ILOp<Integer>> context, boolean preProcess) {
         // Pre-op code for both process and preprocess
 
@@ -1453,6 +1454,7 @@ public class ASMGenerator {
 
         return result;
     }
+
     private List<ASMOp> processBooleanOr(BooleanOr<Integer> op, ASMGeneratorContext<Integer, ILOp<Integer>> context, boolean preProcess) {
         // Pre-op code for both process and preprocess
 
@@ -1786,6 +1788,8 @@ public class ASMGenerator {
 
         return result;
     }
+
+
     private List<ASMOp> processDelayedTimerInput(DelayedTimerInput<Integer> op, ASMGeneratorContext<Integer, ILOp<Integer>> context, boolean preProcess) {
 
         // Pre-op code for both process and preprocess
@@ -1913,11 +1917,12 @@ public class ASMGenerator {
     private List<ASMOp> processInitChannel(InitChannel<Integer> op, ASMGeneratorContext<Integer, ILOp<Integer>> context, boolean preProcess) {
         // Pre-op code for both process and preprocess
 
-        context.setChannel(op.index, op.name, op.typeName);
-
         List<ASMOp> result;
         if (preProcess) {
             // Code for preprocess only
+
+            context.addChannel(op.index, op.name, op.typeName);
+            context.getCurrentWorkspace().allocateTemporary();
 
             result = null;
         } else {
@@ -1946,7 +1951,31 @@ public class ASMGenerator {
 
             result = new ArrayList<>();
             //TODO: Handle channel data type
-            result.add(new Channel(context.getChannel(op.index).getKey()));
+            //TODO: External channels? result.add(new Channel(context.getChannel(op.index).getKey()));
+            result.add(new Ldlp(context.getCurrentWorkspace().getNthTemporaryOffset(context.getChannelOffset(op.index))));
+            result.addAll(pushOps);
+        }
+
+        // Post-op code for both process and preprocess
+
+        return result;
+    }
+    private List<ASMOp> processLoadPortRef(LoadPortRef<Integer> op, ASMGeneratorContext<Integer, ILOp<Integer>> context, boolean preProcess) {
+
+        // Pre-op code for both process and preprocess
+        List<ASMOp> pushOps = ASMGeneratorHelpers.processPushes(1, op, context, preProcess);
+
+        List<ASMOp> result;
+        if (preProcess) {
+            // Code for preprocess only
+
+            result = null;
+        } else {
+            // Code for process only
+
+            result = new ArrayList<>();
+            //TODO: Handle port data type
+            result.add(new Ldc(op.name));
             result.addAll(pushOps);
         }
 

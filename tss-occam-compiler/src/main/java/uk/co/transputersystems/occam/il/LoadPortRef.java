@@ -6,10 +6,14 @@ public class LoadPortRef <TIdentifier> extends ILOp<TIdentifier> {
 
 
     public int index;
+    public String name;
+    public String typeName;
 
-    public LoadPortRef(TIdentifier id, int index, String comment) {
+    public LoadPortRef(TIdentifier id, int index, String name, String typeName, String comment) {
         super(id, "LoadPortRef", comment);
         this.index = index;
+        this.name = name;
+        this.typeName = typeName;
     }
 
     @Override
@@ -20,7 +24,7 @@ public class LoadPortRef <TIdentifier> extends ILOp<TIdentifier> {
 
     @Override
     public Iterable<String> getArgs() {
-        return Arrays.asList(String.valueOf(index));
+        return Arrays.asList(String.valueOf(index), name, typeName);
     }
 
     @Override

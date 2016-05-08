@@ -1120,7 +1120,7 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
                     ilBlock.add(new LoadConstant<>(UUID.randomUUID(), String.valueOf(libraryInfo.getTypeSize(namedOperand.getTypeName())), ""));
                     ilBlock.add(new ReadChannel<>(UUID.randomUUID(), ""));
 
-                    currentScope.pushConstruction(((Channel) namedOperand).getIndex());
+                    currentScope.pushConstruction(namedOperand);
                     currentScope.pushConstruction("CHANNEL");
 
                 }
@@ -1158,11 +1158,11 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
 
                 }
 
-                ilBlock.add(new LoadPortRef<>(UUID.randomUUID(), ((Port) namedOperand).getIndex(), ""));
+                ilBlock.add(new LoadPortRef<>(UUID.randomUUID(), ((Port) namedOperand).getIndex(), ((Port) namedOperand).getName(), ((Port) namedOperand).getTypeName(), ""));
                 ilBlock.add(new LoadConstant<>(UUID.randomUUID(), String.valueOf(libraryInfo.getTypeSize(namedOperand.getTypeName())), ""));
                 ilBlock.add(new ReadPort<>(UUID.randomUUID(), ""));
 
-                currentScope.pushConstruction(((Port) namedOperand).getIndex());
+                currentScope.pushConstruction(namedOperand);
                 currentScope.pushConstruction("PORT");
 
             }catch (Exception e){
@@ -2127,10 +2127,10 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
 
             if (inputType.equals("CHANNEL")) {
 
-                int inputValue = (Integer) currentScope.popConstruction();
+                Channel inputChannel = (Channel) currentScope.popConstruction();
 
                 //Load the channel address onto the stack
-                enableBlock.add(new LoadChannelRef<>(UUID.randomUUID(),inputValue,""));
+                enableBlock.add(new LoadChannelRef<>(UUID.randomUUID(),inputChannel.getIndex(),""));
                 enableBlock.add(new LoadLocal<UUID>(UUID.randomUUID(),guardTempValueIndex,"",false));
                 enableBlock.add(new EnableChannel<>(UUID.randomUUID(),""));
 
@@ -2139,7 +2139,7 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
                 stmtBlockList.add(0, guardBlockList.get(1));
 
                 //Load the channel address onto the stack
-                disableBlock.add(new LoadChannelRef<>(UUID.randomUUID(),inputValue,""));
+                disableBlock.add(new LoadChannelRef<>(UUID.randomUUID(),inputChannel.getIndex(),""));
                 //Load the temporary variable which contains the guard value onto the stack
                 disableBlock.add(new LoadLocal<UUID>(UUID.randomUUID(),guardTempValueIndex,"",false));
 
@@ -2159,16 +2159,16 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
 
             } else if(inputType.equals("PORT")) {
 
-                int inputValue = (Integer) currentScope.popConstruction();
+                Port inputPort = (Port) currentScope.popConstruction();
 
-                enableBlock.add(new LoadPortRef<>(UUID.randomUUID(),inputValue,""));
+                enableBlock.add(new LoadPortRef<>(UUID.randomUUID(),inputPort.getIndex(),inputPort.getName(), inputPort.getTypeName(),""));
                 enableBlock.add(new LoadLocal<UUID>(UUID.randomUUID(),guardTempValueIndex,"",false));
                 enableBlock.add(new EnablePort<>(UUID.randomUUID(),""));
 
                 stmtBlockList.add(0, guardBlockList.get(1));
 
                 disableBlock.add(new LoadLocal<UUID>(UUID.randomUUID(),guardTempValueIndex,"",false));
-                disableBlock.add(new LoadChannelRef<>(UUID.randomUUID(),inputValue,""));
+                disableBlock.add(new LoadPortRef<>(UUID.randomUUID(),inputPort.getIndex(), inputPort.getName(), inputPort.getTypeName(),""));
                 disableBlock.add(new DisablePort<>(UUID.randomUUID(), stmtBlockList.get(0).get(0).getId(), afterEndAlt.getId(), "" ));
 
             } else if (inputType.equals("DELAYED_INPUT")) {
@@ -2811,7 +2811,7 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
 
                 ilBlock.add(new StoreLocal<>(UUID.randomUUID(), currentScope.getVariable(tempVar).getIndex(), "Temporary variable"));
                 ilBlock.add(new LoadLocal<UUID>(UUID.randomUUID(), currentScope.getVariable(tempVar).getIndex(), "Load address", true));
-                ilBlock.add(new LoadPortRef<>(UUID.randomUUID(), ((Port) namedOperand).getIndex(), ""));
+                ilBlock.add(new LoadPortRef<>(UUID.randomUUID(), ((Port) namedOperand).getIndex(), ((Port) namedOperand).getName(), ((Port) namedOperand).getTypeName(), ""));
                 ilBlock.add(new LoadConstant<>(UUID.randomUUID(), String.valueOf(libraryInfo.getTypeSize(namedOperand.getTypeName())), ""));
 
                 ilBlock.add(new WritePort<>(UUID.randomUUID(), ""));
