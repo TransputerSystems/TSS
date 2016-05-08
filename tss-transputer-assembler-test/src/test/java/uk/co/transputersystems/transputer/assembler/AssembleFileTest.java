@@ -15,6 +15,7 @@ import org.junit.Test;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 import static org.junit.Assert.assertTrue;
@@ -24,11 +25,14 @@ import static org.junit.Assert.assertTrue;
  */
 public class AssembleFileTest {
 
+    Properties properties = new Properties();
+
     @Before
     public void before() throws Exception {
-        File dir = new File("target/test-output/assemble-file-test/function-tests");
-        File dir2 = new File("target/test-output/assemble-file-test/feature-tests");
-        File dir3 = new File("target/test-output/assemble-file-test/basic-tests");
+        properties.load(this.getClass().getResourceAsStream("/basedir.properties"));
+        File dir = new File(properties.getProperty("project.build.directory") + "/test-output/assemble-file-test/function-tests");
+        File dir2 = new File(properties.getProperty("project.build.directory") + "/test-output/assemble-file-test/feature-tests");
+        File dir3 = new File(properties.getProperty("project.build.directory") + "/test-output/assemble-file-test/basic-tests");
         dir.mkdirs();
         dir2.mkdirs();
         dir3.mkdirs();
@@ -136,7 +140,7 @@ public class AssembleFileTest {
             out.flush();
         }
 
-        File outputFile = new File("target/test-output/assemble-file-test" + filePath.replace(".occ", ".auto.s"));
+        File outputFile = new File(properties.getProperty("project.build.directory")+ "/test-output/assemble-file-test" + filePath.replace(".occ", ".auto.s"));
         FileWriter outputWriter = new FileWriter(outputFile);
         compiler.writeASMBlocks(outputWriter, asmBlocks);
         outputWriter.flush();

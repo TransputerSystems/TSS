@@ -27,11 +27,14 @@ import static org.junit.Assert.assertTrue;
  */
 public class SimulateFileTest {
 
+    Properties properties = new Properties();
+
     @Before
     public void before() throws Exception {
-        File dir = new File("target/test-output/simulate-file-test/function-tests");
-        File dir2 = new File("target/test-output/simulate-file-test/feature-tests");
-        File dir3 = new File("target/test-output/simulate-file-test/basic-tests");
+        properties.load(this.getClass().getResourceAsStream("/basedir.properties"));
+        File dir = new File(properties.getProperty("project.build.directory") + "/test-output/simulate-file-test/function-tests");
+        File dir2 = new File(properties.getProperty("project.build.directory") + "/test-output/simulate-file-test/feature-tests");
+        File dir3 = new File(properties.getProperty("project.build.directory") + "/test-output/simulate-file-test/basic-tests");
         dir.mkdirs();
         dir2.mkdirs();
         dir3.mkdirs();
@@ -140,7 +143,7 @@ public class SimulateFileTest {
             out.flush();
         }
 
-        File outputFile = new File("target/test-output/simulate-file-test" + filePath.replace(".occ", ".auto.s"));
+        File outputFile = new File(properties.getProperty("project.build.directory") + "/test-output/simulate-file-test" + filePath.replace(".occ", ".auto.s"));
         FileWriter outputWriter = new FileWriter(outputFile);
         compiler.writeASMBlocks(outputWriter, asmBlocks);
         outputWriter.flush();
