@@ -50,6 +50,7 @@
         <testResources>
             <testResource>
                 <directory>${project.basedir}/src/test/resources</directory>
+                <filtering>true</filtering>
             </testResource>
             <testResource>
                 <directory>${project.build.directory}/maven-shared-archive-resources</directory>

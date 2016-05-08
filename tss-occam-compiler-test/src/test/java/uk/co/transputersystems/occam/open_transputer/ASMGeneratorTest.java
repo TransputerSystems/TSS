@@ -15,17 +15,21 @@ import uk.co.transputersystems.occam.ErrorListener;
 
 import java.io.*;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 import static org.junit.Assert.assertTrue;
 
 public class ASMGeneratorTest {
 
+    Properties properties = new Properties();
+
     @Before
     public void before() throws Exception {
-        File dir = new File("target/test-output/asm-generator-test/function-tests");
-        File dir2 = new File("target/test-output/asm-generator-test/feature-tests");
-        File dir3 = new File("target/test-output/asm-generator-test/basic-tests");
+        properties.load(this.getClass().getResourceAsStream("/basedir.properties"));
+        File dir = new File(properties.getProperty("project.build.directory") + "/test-output/asm-generator-test/function-tests");
+        File dir2 = new File(properties.getProperty("project.build.directory") + "/test-output/asm-generator-test/feature-tests");
+        File dir3 = new File(properties.getProperty("project.build.directory") + "/test-output/asm-generator-test/basic-tests");
         dir.mkdirs();
         dir2.mkdirs();
         dir3.mkdirs();
@@ -93,9 +97,10 @@ public class ASMGeneratorTest {
             out.flush();
         }
 
-        File outputFile = new File("target/test-output/asm-generator-test" + filePath.replace(".occ", ".auto.s"));
+        File outputFile = new File(properties.getProperty("project.build.directory") + "/test-output/asm-generator-test" + filePath.replace(".occ", ".auto.s"));
         FileWriter outputWriter = new FileWriter(outputFile);
         compiler.writeASMBlocks(outputWriter, asmBlocks);
+
         outputWriter.flush();
         outputWriter.close();
 
