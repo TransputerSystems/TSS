@@ -1571,7 +1571,9 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
 
         //Visit boolean condition and add the returned ILBlocks to the result
         List<ILBlock<UUID,ILOp<UUID>>> boolBlocks = visit(ctx.bool());
-        result.appendBlockList(boolBlocks);
+        stmtBlocks.remove(result);
+        boolBlocks.addAll(stmtBlocks);
+        stmtBlocks = result.mergeBlockList(boolBlocks);
 
         //If true target to statements
         result.add(new BranchIfTrue<>(UUID.randomUUID(), stmtLabel.getId(), ""));
@@ -2371,7 +2373,7 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
         functionBlock.add(new MethodStart<>(UUID.randomUUID(), "Start of `" + functionScope.getName() + "`"));
 
         List<ILBlock<UUID,ILOp<UUID>>> valueProcess = visit(ctx.value_process());
-        List<ILBlock<UUID,ILOp<UUID>> > result = functionBlock.mergeBlockList(valueProcess);
+        List<ILBlock<UUID,ILOp<UUID>>> result = functionBlock.mergeBlockList(valueProcess);
 
         while (libraryInfo.getCurrentScope() != rootScope) {
             libraryInfo.popScope();
@@ -2410,7 +2412,7 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
         functionBlock.add(new MethodStart<>(UUID.randomUUID(), "Start of `" + functionScope.getName() + "`"));
 
         List<ILBlock<UUID,ILOp<UUID>>> expressionList = visit(ctx.expression_list());
-        List<ILBlock<UUID,ILOp<UUID>> > result = functionBlock.mergeBlockList(expressionList);
+        List<ILBlock<UUID,ILOp<UUID>>> result = functionBlock.mergeBlockList(expressionList);
 
         while (libraryInfo.getCurrentScope() != rootScope) {
             libraryInfo.popScope();
@@ -2790,6 +2792,7 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
                     ilBlock.add(new LoadConstant<> (  UUID.randomUUID() , String.valueOf(libraryInfo.getTypeSize(namedOperand.getTypeName())) , "" ));
                     ilBlock.add(new WriteChannel<>(UUID.randomUUID(),  ""));
 
+                    result = ilBlock.mergeBlockList(result);
                 }catch (Exception e){
                     System.out.println("Error calculating variable size");
                     System.exit(0);
@@ -2816,6 +2819,7 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
 
                 ilBlock.add(new WritePort<>(UUID.randomUUID(), ""));
 
+                result = ilBlock.mergeBlockList(result);
             }catch( Exception e){
                 System.out.println("Error calculating variable size");
                 System.exit(0);
