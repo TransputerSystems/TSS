@@ -150,7 +150,7 @@ public class Assembler {
         List<Instruction> dollarSubstitutedAssembly = processDollarLabelOperands(assembly);
 
         if (config != null) {
-            dollarSubstitutedAssembly = processChanDirectives(assembly, config);
+            dollarSubstitutedAssembly = processChanDirectives(dollarSubstitutedAssembly, config);
             logger.println("== Assembly: #chan directives processed ==");
             logger.println(assembly);
         }
