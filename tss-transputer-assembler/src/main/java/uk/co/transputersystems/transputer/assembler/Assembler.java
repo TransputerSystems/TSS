@@ -286,28 +286,47 @@ public class Assembler {
 
             if (instruction.labelOperand != null) {
                 Matcher dollarMatcher = dollarPattern.matcher(instruction.labelOperand);
-                if (dollarMatcher.matches()) {
-                    while (dollarMatcher.find()) {
-                        nextLabelIndex++;
 
-                        if (dollarMatcher.group("current") != null) {
-                            processedAssembly.add(new Instruction(InstructionType.INSTRUCTION, "__dollar" + nextLabelIndex, null, null, null, null, null, instruction.originalLine));
-                            processedAssembly.add(new Instruction(instruction.type, instruction.label, instruction.opcode, instruction.constantOperand, instruction.labelOperand.replace(dollarMatcher.group(0), "__dollar" + nextLabelIndex), instruction.comment, instruction.directive, instruction.originalLine));
-                        } else if (dollarMatcher.group("number") != null) {
-                            Long maybeNumber = tryParse(dollarMatcher.group("number"));
-                            if (maybeNumber != null) {
-                                labelsToInsert.add(new Pair<>(instructionNumber + 1 + maybeNumber, "__dollar" + nextLabelIndex));
-                                processedAssembly.add(new Instruction(instruction.type, instruction.label, instruction.opcode, instruction.constantOperand, instruction.labelOperand.replace(dollarMatcher.group(0), "__dollar" + nextLabelIndex), instruction.comment, instruction.directive, instruction.originalLine));
-                            } else {
-                                throw new IllegalArgumentException("Label operand '$" + dollarMatcher.group("number") + "' could not be parsed");
-                            }
+                Instruction substitutedInstruction = instruction;
+
+                while (dollarMatcher.find()) {
+                    nextLabelIndex++;
+
+                    if (dollarMatcher.group("current") != null) {
+                        processedAssembly.add(new Instruction(InstructionType.INSTRUCTION, "__dollar" + nextLabelIndex, null, null, null, null, null, instruction.originalLine));
+                        substitutedInstruction = new Instruction(
+                                substitutedInstruction.type,
+                                substitutedInstruction.label,
+                                substitutedInstruction.opcode,
+                                substitutedInstruction.constantOperand,
+                                substitutedInstruction.labelOperand.replace(dollarMatcher.group(0), "__dollar" + nextLabelIndex),
+                                substitutedInstruction.comment,
+                                substitutedInstruction.directive,
+                                substitutedInstruction.originalLine);
+                    } else if (dollarMatcher.group("number") != null) {
+                        Long maybeNumber = tryParse(dollarMatcher.group("number"));
+                        if (maybeNumber != null) {
+                            labelsToInsert.add(new Pair<>(instructionNumber + 1 + maybeNumber, "__dollar" + nextLabelIndex));
+                            substitutedInstruction = new Instruction(
+                                    substitutedInstruction.type,
+                                    substitutedInstruction.label,
+                                    substitutedInstruction.opcode,
+                                    substitutedInstruction.constantOperand,
+                                    substitutedInstruction.labelOperand.replace(dollarMatcher.group(0), "__dollar" + nextLabelIndex),
+                                    substitutedInstruction.comment,
+                                    substitutedInstruction.directive,
+                                    substitutedInstruction.originalLine);
                         } else {
-                            throw new IllegalArgumentException("Cannot process dollar label '" + dollarMatcher.group(0) + "'");
+                            throw new IllegalArgumentException("Label operand '$" + dollarMatcher.group("number") + "' could not be parsed");
                         }
+                    } else {
+                        throw new IllegalArgumentException("Cannot process dollar label '" + dollarMatcher.group(0) + "'");
                     }
-                } else {
-                    processedAssembly.add(instruction);
+                    dollarMatcher = dollarPattern.matcher(substitutedInstruction.labelOperand);
                 }
+
+                processedAssembly.add(substitutedInstruction);
+
             } else {
                 processedAssembly.add(instruction);
             }
