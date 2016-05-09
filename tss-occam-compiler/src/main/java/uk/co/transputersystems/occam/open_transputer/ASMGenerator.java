@@ -1769,8 +1769,8 @@ public class ASMGenerator {
     private List<ASMOp> processAfter(After<Integer> op, ASMGeneratorContext<Integer, ILOp<Integer>> context, boolean preProcess) {
 
         // Pre-op code for both process and preprocess
-        List<ASMOp> pushOps = ASMGeneratorHelpers.processPushes(1, op, context, preProcess);
         List<ASMOp> popOps = ASMGeneratorHelpers.processPops(2, op, context, preProcess);
+        List<ASMOp> pushOps = ASMGeneratorHelpers.processPushes(1, op, context, preProcess);
 
         List<ASMOp> result;
         if (preProcess) {
@@ -1781,11 +1781,12 @@ public class ASMGenerator {
             // Code for process only
 
             result = new ArrayList<>();
-            result.add(new Ldtimer());
-            result.addAll(pushOps);
+            //TODO: Handle byte type as (( MINUS )MINUS1) 127
             result.addAll(popOps);
-            result.add(new Sum());
-            result.add(new Tin());
+            result.add(new Diff());
+            result.add(new Ldc(0));
+            result.add(new Gt());
+            result.addAll(pushOps);
         }
 
         // Post-op code for both process and preprocess
