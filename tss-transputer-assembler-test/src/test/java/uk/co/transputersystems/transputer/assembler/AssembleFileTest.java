@@ -51,7 +51,7 @@ public class AssembleFileTest {
      * @return true if the compilation appears to have succeeded, otherwise false.
      */
     public boolean testAssemblingFile(File file) throws Exception {
-        return testAssemblingFile(file, true, Assembler.loadConfig(null));
+        return testAssemblingFile(file, true, Assembler.loadConfig(null), false);
     }
     /**
      * Given a file, attempt to parse and compile it to TSIL. Checks that the
@@ -61,7 +61,7 @@ public class AssembleFileTest {
      * @param verbose Whether to print debug output or not.
      * @return true if the compilation appears to have succeeded, otherwise false.
      */
-    public boolean testAssemblingFile(File file, boolean verbose, AssemblerConfig config) throws Exception {
+    public boolean testAssemblingFile(File file, boolean verbose, AssemblerConfig config, boolean insertIOConfiguration) throws Exception {
         PrintStream out = new PrintStream(System.out);
 
         if (verbose) {
@@ -70,7 +70,7 @@ public class AssembleFileTest {
         }
 
         String input = new String(Files.readAllBytes(file.toPath()));
-        List<String> output = Assembler.assemble(input, config, out);
+        List<String> output = Assembler.assemble(input, config, out, insertIOConfiguration);
 
         assertTrue(output != null);
         assertTrue(output.size() > 0);
@@ -203,7 +203,7 @@ public class AssembleFileTest {
         pins.add(c1);
         assemblerConfig.getProcessor().setIopins(pins);
 
-        assertTrue(testAssemblingFile(asmFile, true, assemblerConfig));
+        assertTrue(testAssemblingFile(asmFile, true, assemblerConfig, true));
     }
 
     @Test

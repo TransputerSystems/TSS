@@ -72,7 +72,7 @@ public class SimulateFileTest {
         }
 
         String input = new String(Files.readAllBytes(file.toPath()));
-        List<String> output = Assembler.assemble(input, config, out);
+        List<String> output = Assembler.assemble(input, config, out, false);
 
         assertTrue(output != null);
         assertTrue(output.size() > 0);
@@ -206,6 +206,7 @@ public class SimulateFileTest {
 		assertTrue(testSimulatingFile(Collections.singletonList(objectFile)));
     }
 
+    @Ignore("Ports not implemented in the suimulator yet.")
     @Test
     public void testPorts() throws Exception {
         String path = "/feature-tests/port.occ";
