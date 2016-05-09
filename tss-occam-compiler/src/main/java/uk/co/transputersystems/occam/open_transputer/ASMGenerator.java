@@ -1916,6 +1916,8 @@ public class ASMGenerator {
 
     private List<ASMOp> processInitChannel(InitChannel<Integer> op, ASMGeneratorContext<Integer, ILOp<Integer>> context, boolean preProcess) {
         // Pre-op code for both process and preprocess
+        List<ASMOp> pushOps = ASMGeneratorHelpers.processPushes(1, op, context, preProcess);
+        List<ASMOp> popOps = ASMGeneratorHelpers.processPops(1, op, context, preProcess);
 
         List<ASMOp> result;
         if (preProcess) {
@@ -1929,6 +1931,10 @@ public class ASMGenerator {
             // Code for process only
 
             result = new ArrayList<>();
+            result.add(new Mint());
+            result.addAll(pushOps);
+            result.addAll(popOps);
+            result.add(new Stl(context.getCurrentWorkspace().getNthTemporaryOffset(context.getChannelOffset(op.index))));
         }
 
         // Post-op code for both process and preprocess
