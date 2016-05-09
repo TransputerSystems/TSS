@@ -28,7 +28,7 @@ public class Assembler {
     public final static Pattern inputComment = Pattern.compile("^\\h*--\\h*(?<comment>\\V*)$");
     // TODO: test underscores, . and ~ in labels
     public final static Pattern instructionPattern = Pattern.compile(
-            "^\\h*((?<label>[0-9A-Za-z~\\._]+):)?\\h*((?<code>(?<opcode>[a-z]+)(\\h+?((?<constantoperand>-?[0-9]+)|(?<labeloperand>[0-9A-Za-z~$\\._\\-][0-9A-Za-z~$\\._\\- ]*?)))?)?(\\h*--\\h*(?<comment>\\V*?))?)?\\h*$");
+            "^\\h*((?<label>[0-9A-Za-z~\\._]+):)?\\h*((?<code>(?<opcode>[a-z]+)(\\h+?((?<constantoperand>-?[0-9]+)|(?<labeloperand>[0-9A-Za-z~$@\\._\\-][0-9A-Za-z~$\\._\\- ]*?)))?)?(\\h*--\\h*(?<comment>\\V*?))?)?\\h*$");
     // TODO: test direct parsing, check that directives are not accidentally interpreted as instructions
     public final static Pattern directivePattern = Pattern.compile(
             "^\\h*((?<label>[0-9A-Za-z~\\._]+):)?\\h*((?<directive>(#data\\h+[0-9]+)|(#chan\\h+[0-9A-Za-z]+))?(\\h*--\\h*(?<comment>\\V*?))?)?\\h*$");
@@ -155,8 +155,9 @@ public class Assembler {
 
         Assembly labelMappedAssembly = makeLabelMap(dataDirectivesProcessedAssembly);
 
+        Map<String, Long> absoluteLabelMap = new LinkedHashMap<>();
         if (config != null) {
-            labelMappedAssembly = addConfigToLabelMap(labelMappedAssembly, config);
+            absoluteLabelMap = getConfigLabels(config);
         }
 
         logger.println("== Label map ==");
@@ -167,7 +168,7 @@ public class Assembler {
         logger.println("== Assembly: label map built ==");
         logger.println(labelMappedAssembly.instructions);
 
-        Assembly patchedLabelAssembly = patchLabels(labelMappedAssembly);
+        Assembly patchedLabelAssembly = patchLabels(labelMappedAssembly, absoluteLabelMap);
 
         logger.println("== Label map: patched ==");
         for (Map.Entry<String, Long> entry : patchedLabelAssembly.labelMap.entrySet()) {
@@ -415,34 +416,34 @@ public class Assembler {
     }
 
     /**
-     * Extract the channel-label pairs from the config and add them to the label map.
+     * Extract the channel-label pairs from the config.
      */
-    public static Assembly addConfigToLabelMap(@Nonnull Assembly labelMappedAssembly, @Nonnull AssemblerConfig config) throws DuplicateLabelException {
-        Map<String, Long> updatedLabelMap = new LinkedHashMap<>(labelMappedAssembly.labelMap);
+    public static Map<String, Long> getConfigLabels(@Nonnull AssemblerConfig config) throws DuplicateLabelException {
+        Map<String, Long> absoluteLabelMap = new LinkedHashMap<>();
 
         for (Connection connection : config.getProcessor().getConnections()) {
-            if (updatedLabelMap.containsKey(connection.getChannel())) {
+            if (absoluteLabelMap.containsKey(connection.getChannel())) {
                 throw new DuplicateLabelException(connection.getChannel());
             } else {
-                updatedLabelMap.put(connection.getChannel(), (long) connection.getDest_port()); // is this right?
+                absoluteLabelMap.put("@" + connection.getChannel(), (long) connection.getDest_port()); // is this right?
             }
         }
 
         for (IOPin iopin : config.getProcessor().getIopins()) {
-            if (updatedLabelMap.containsKey(iopin.getChannel())) {
+            if (absoluteLabelMap.containsKey(iopin.getChannel())) {
                 throw new DuplicateLabelException(iopin.getChannel());
             } else {
-                updatedLabelMap.put(iopin.getChannel(), (long) iopin.getAddr());
+                absoluteLabelMap.put("@" + iopin.getChannel(), (long) iopin.getAddr());
             }
         }
 
-        return new Assembly(labelMappedAssembly.instructions, updatedLabelMap);
+        return absoluteLabelMap;
     }
 
     /**
      * Perform prefixing/nfixing operations, updating the label match to reflect the inserted lines.
      */
-    public static Assembly patchLabels(Assembly assembly) {
+    public static Assembly patchLabels(Assembly assembly, Map<String, Long> absoluteLabelMap) {
         List<Instruction> updatedAssembly = new ArrayList<>();
         Map<String, Long> updatedLabelMap = new HashMap<>(assembly.labelMap);
 
@@ -499,6 +500,8 @@ public class Assembler {
             lineNumber += patchOffset + 1;
 
         }
+
+        updatedLabelMap.putAll(absoluteLabelMap);
 
         return new Assembly(updatedAssembly, updatedLabelMap);
     }
