@@ -210,6 +210,7 @@ public class SimulateFileTest {
     public void testPorts() throws Exception {
         String path = "/feature-tests/port.occ";
         File asmFile = testCompilingFile(getResource(path), path, "port.occ");
+
         AssemblerConfig assemblerConfig = new AssemblerConfig();
         List<IOPin> pins = new ArrayList<>();
         IOPin c1 = new IOPin();
@@ -218,6 +219,7 @@ public class SimulateFileTest {
         c1.setAddr(74);
         pins.add(c1);
         assemblerConfig.getProcessor().setIopins(pins);
+
         File objectFile = testAssemblingFile(asmFile, true, assemblerConfig);
         assertTrue(testSimulatingFile(Collections.singletonList(objectFile)));
     }
