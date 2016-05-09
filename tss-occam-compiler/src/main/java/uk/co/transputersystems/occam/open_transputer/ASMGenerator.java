@@ -1801,6 +1801,8 @@ public class ASMGenerator {
         List<ASMOp> pushOps = ASMGeneratorHelpers.processPushes(1, op, context, preProcess);
         List<ASMOp> popOps = ASMGeneratorHelpers.processPops(2, op, context, preProcess);
 
+        //TODO: Stack should be empty or all stored into memory?
+
         List<ASMOp> result;
         if (preProcess) {
             // Code for preprocess only
