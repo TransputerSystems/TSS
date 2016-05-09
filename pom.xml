@@ -18,6 +18,7 @@
         <module>tss-transputer-simulator-test</module>
         <module>tss-transputer-utils</module>
         <module>tss-transputer-disassembler</module>
+        <module>tss-opentransputer-bin2rom</module>
     </modules>
 
     <developers>
