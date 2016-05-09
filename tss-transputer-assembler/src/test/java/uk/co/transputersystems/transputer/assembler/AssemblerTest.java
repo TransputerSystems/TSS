@@ -141,6 +141,39 @@ public class AssemblerTest {
     }
 
     @Test
+    public void testProcessMultipleDollarLabelOperand() {
+        List<Instruction> instructions = Arrays.asList(
+                new Instruction(InstructionType.INSTRUCTION, "init", Assembler.opcodes.get("j"), null, "$2-$1", null, null, 1),
+                new Instruction(InstructionType.INSTRUCTION, null, Assembler.opcodes.get("j"), null, "$0-$C", null, null, 2),
+                new Instruction(InstructionType.INSTRUCTION, "ALABEL", Assembler.opcodes.get("ajw"), 1L, null, null, null, 3)
+        );
+
+        List<Instruction> processedInstructions = Assembler.processDollarLabelOperands(instructions);
+
+        checkInstructionEquality(
+                new Instruction(InstructionType.INSTRUCTION, "init", Assembler.opcodes.get("j"), null, "__dollar1-__dollar2", null, null, 1),
+                processedInstructions.get(0));
+        checkInstructionEquality(
+                new Instruction(InstructionType.INSTRUCTION, "__dollar4", null, null, null, null, null, 2),
+                processedInstructions.get(1));
+        checkInstructionEquality(
+                new Instruction(InstructionType.INSTRUCTION, null, Assembler.opcodes.get("j"), null, "__dollar3-__dollar4", null, null, 2),
+                processedInstructions.get(2));
+        checkInstructionEquality(
+                new Instruction(InstructionType.INSTRUCTION, "__dollar2", null, null, null, null, null, 3),
+                processedInstructions.get(3));
+        checkInstructionEquality(
+                new Instruction(InstructionType.INSTRUCTION, "__dollar3", null, null, null, null, null, 3),
+                processedInstructions.get(4));
+        checkInstructionEquality(
+                new Instruction(InstructionType.INSTRUCTION, "ALABEL", Assembler.opcodes.get("ajw"), 1L, null, null, null, 3),
+                processedInstructions.get(5));
+        checkInstructionEquality(
+                new Instruction(InstructionType.INSTRUCTION, "__dollar1", null, null, null, null, null, 3),
+                processedInstructions.get(6));
+    }
+
+    @Test
     public void testProcessDollarLabelOperandZero() {
         List<Instruction> instructions = Arrays.asList(
                 new Instruction(InstructionType.INSTRUCTION, "init", Assembler.opcodes.get("j"), null, "ALABEL-$0", null, null, 1),

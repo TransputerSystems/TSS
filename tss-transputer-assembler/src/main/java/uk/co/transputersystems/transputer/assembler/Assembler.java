@@ -265,7 +265,12 @@ public class Assembler {
         // Number of the instruction currently being processed - excludes lines with only comments/labels
         long instructionNumber = 0;
 
+        // Keep track of the last originalLine so we can use it at the end
+        long lastOriginalLine = 0;
+
         for (Instruction instruction : instructions) {
+
+            lastOriginalLine = instruction.originalLine;
 
             if (!((instruction.type == InstructionType.INSTRUCTION && instruction.opcode == null) || (instruction.type == InstructionType.DIRECTIVE && instruction.directive == null))) {
                 instructionNumber++;
@@ -299,7 +304,7 @@ public class Assembler {
                                 substitutedInstruction.label,
                                 substitutedInstruction.opcode,
                                 substitutedInstruction.constantOperand,
-                                substitutedInstruction.labelOperand.replace(dollarMatcher.group(0), "__dollar" + nextLabelIndex),
+                                substitutedInstruction.labelOperand.replace("$C", "__dollar" + nextLabelIndex),
                                 substitutedInstruction.comment,
                                 substitutedInstruction.directive,
                                 substitutedInstruction.originalLine);
@@ -312,7 +317,7 @@ public class Assembler {
                                     substitutedInstruction.label,
                                     substitutedInstruction.opcode,
                                     substitutedInstruction.constantOperand,
-                                    substitutedInstruction.labelOperand.replace(dollarMatcher.group(0), "__dollar" + nextLabelIndex),
+                                    substitutedInstruction.labelOperand.replace("$" + maybeNumber, "__dollar" + nextLabelIndex),
                                     substitutedInstruction.comment,
                                     substitutedInstruction.directive,
                                     substitutedInstruction.originalLine);
@@ -330,6 +335,22 @@ public class Assembler {
             } else {
                 processedAssembly.add(instruction);
             }
+        }
+
+        instructionNumber++;
+
+        // Insert any labels destined for the end
+        List<Pair<Long, String>> labelsLeftToInsert = new ArrayList<>();
+        for (Pair<Long, String> labelToInsert : labelsToInsert) {
+            if (labelToInsert.a.equals(instructionNumber)) {
+                processedAssembly.add(new Instruction(InstructionType.INSTRUCTION, labelToInsert.b, null, null, null, null, null, lastOriginalLine));
+            } else {
+                labelsLeftToInsert.add(labelToInsert);
+            }
+        }
+
+        if (labelsLeftToInsert.size() > 0) {
+            throw new ArrayIndexOutOfBoundsException("A dollar label wants to be inserted beyond the end of the code.");
         }
 
         return processedAssembly;
