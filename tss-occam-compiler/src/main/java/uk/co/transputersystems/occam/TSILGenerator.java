@@ -992,7 +992,12 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
 
 
         } else {//Timer type
-            //throw new NotImplementedException();
+            for (TerminalNode name : ctx.NAME()) {
+                currentScope.addTimer(name.getText());
+                if (!(currentScope instanceof FileInformation)) {
+                    currentScope = libraryInfo.pushNewScope();
+                }
+            }
         }
 
         return Collections.singletonList(ilBlock);
