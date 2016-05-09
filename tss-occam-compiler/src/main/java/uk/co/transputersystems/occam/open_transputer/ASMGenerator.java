@@ -1798,8 +1798,7 @@ public class ASMGenerator {
     private List<ASMOp> processDelayedTimerInput(DelayedTimerInput<Integer> op, ASMGeneratorContext<Integer, ILOp<Integer>> context, boolean preProcess) {
 
         // Pre-op code for both process and preprocess
-        List<ASMOp> pushOps = ASMGeneratorHelpers.processPushes(1, op, context, preProcess);
-        List<ASMOp> popOps = ASMGeneratorHelpers.processPops(2, op, context, preProcess);
+        List<ASMOp> popOps = ASMGeneratorHelpers.processPops(1, op, context, preProcess);
 
         //TODO: Stack should be empty or all stored into memory?
 
@@ -1812,10 +1811,7 @@ public class ASMGenerator {
             // Code for process only
 
             result = new ArrayList<>();
-            result.add(new Ldtimer());
-            result.addAll(pushOps);
             result.addAll(popOps);
-            result.add(new Sum());
             result.add(new Tin());
         }
 
