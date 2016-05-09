@@ -25,6 +25,10 @@ public class IOPin {
         return config;
     }
 
+    /**
+     * Set mode to input or output.
+     * @param config 1=Output, 0=Input
+     */
     public void setConfig(int config) {
         this.config = config;
     }
