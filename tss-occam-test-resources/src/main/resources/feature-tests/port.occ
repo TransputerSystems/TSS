@@ -5,10 +5,9 @@
 --Read a value from a channel
 PROC init()
     PORT OF INT c1 :
-    INT a,b:
+    INT a:
     SEQ
-        a := 2
+        a := 1
         PAR
             c1 ! a
-            c1 ? b
 :
