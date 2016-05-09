@@ -4,7 +4,7 @@ package uk.co.transputersystems.occam.metadata;
  * Created by Ed on 31/03/2016.
  */
 public class WorkspaceLocation {
-    public int offset;
+    private int offset;
     /** Special meanings:
      *      Integer.MIN_VALUE = Parent workspace pointer
      *      Integer.MAX_VALUE = Temporary value
@@ -21,5 +21,12 @@ public class WorkspaceLocation {
     public WorkspaceLocation(int offset, int itemIndex) {
         this.offset = offset;
         this.itemIndex = itemIndex;
+    }
+
+    public int getOffset(int fixedOffset) {
+        return offset - fixedOffset;
+    }
+    public void setOffset(int value) {
+        offset = value;
     }
 }

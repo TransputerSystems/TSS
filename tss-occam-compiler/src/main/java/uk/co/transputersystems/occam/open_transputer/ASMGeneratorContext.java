@@ -33,7 +33,7 @@ public class ASMGeneratorContext<TIdentifier, TILOp extends ILOp<? extends TIden
     public Stack<Integer> initProcesses_ExpandedSizes = new Stack<>();
     public Stack<Integer> initProcesses_ContinueOpIds = new Stack<>();
 
-    public Map<Function, Map<Integer,Map<Integer,Map.Entry<String,String>>>> channelMappings = new HashMap<>();
+    public Map<Function, Map<Integer,ChannelDescriptor>> channelMappings = new HashMap<>();
 
     public ASMGeneratorContext(LibraryInformation libraryInformation) throws Exception {
         this.libraryInformation = libraryInformation;
@@ -63,9 +63,7 @@ public class ASMGeneratorContext<TIdentifier, TILOp extends ILOp<? extends TIden
         currentFunction = value;
         currentWorkspace = currentFunction.getWorkspace();
         if (!channelMappings.containsKey(value)) {
-            Map<Integer, Map<Integer,Map.Entry<String,String>>> funcMap = new HashMap<>();
-            funcMap.put(currentFunction.getWorkspace().getId(), new HashMap<>());
-            channelMappings.put(value, funcMap);
+            channelMappings.put(value, new HashMap<>());
         }
         stackBranches = new ArrayList<>();
         currentStackBranch = new StackBranch();
@@ -85,7 +83,6 @@ public class ASMGeneratorContext<TIdentifier, TILOp extends ILOp<? extends TIden
     }
     public void addWorkspaceTransition(TIdentifier targetId, Integer newWorkspaceId) {
         workspaceTransitionPoints.put(targetId, newWorkspaceId);
-        channelMappings.get(currentFunction).put(newWorkspaceId, new HashMap<>());
     }
 
     public void checkForWorkspaceTransition(TILOp op) {
@@ -96,17 +93,10 @@ public class ASMGeneratorContext<TIdentifier, TILOp extends ILOp<? extends TIden
     }
 
     public void addChannel(Integer index, String name, String typeName) {
-        channelMappings.get(currentFunction).get(currentWorkspace.getId()).put(index, new AbstractMap.SimpleImmutableEntry<>(name,typeName));
+        channelMappings.get(currentFunction).put(index, new ChannelDescriptor(index,name,typeName,channelMappings.get(currentFunction).size(),getCurrentWorkspace()));
     }
-    public int getChannelOffset(Integer index) {
-        List<Integer> keys = Arrays.asList(channelMappings.get(currentFunction).get(currentWorkspace.getId())
-                .keySet()
-                .toArray(new Integer[0]));
-        keys.sort((x, y) -> x.compareTo(y));
-        return keys.indexOf(index);
-    }
-    public Map.Entry<String,String> getChannel(Integer index) {
-        return channelMappings.get(currentFunction).get(currentWorkspace.getId()).get(index);
+    public ChannelDescriptor getChannel(Integer index) {
+        return channelMappings.get(currentFunction).get(index);
     }
 
     public void updateCurrentStackBranch(int currentPosition) {

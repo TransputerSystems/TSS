@@ -5,6 +5,7 @@ import uk.co.transputersystems.occam.il.Add;
 import uk.co.transputersystems.occam.il.Call;
 import uk.co.transputersystems.occam.metadata.Function;
 import uk.co.transputersystems.occam.il.*;
+import uk.co.transputersystems.occam.metadata.Workspace;
 import uk.co.transputersystems.occam.open_transputer.assembly.*;
 import uk.co.transputersystems.occam.open_transputer.assembly.Label;
 
@@ -361,11 +362,11 @@ public class ASMGenerator {
                 result.add(new Ldc(0));
             }
 
-            int offset = context.getCurrentWorkspace().getLastTemporaryOffset(Math.max(functionToCall.getReturnTypes().size()-3,0) - Math.max(argsSize-3,0));
+            int offset = context.getCurrentWorkspace().getLastTemporaryOffset(Math.max(functionToCall.getReturnTypes().size()-3,0) - Math.max(argsSize-3,0), true, Integer.MIN_VALUE);
             result.add(new Ajw(offset));
             result.add(new uk.co.transputersystems.occam.open_transputer.assembly.Call(op.functionName + "-$0"    ));
 
-            offset = context.getCurrentWorkspace().getLastTemporaryOffset(0);
+            offset = context.getCurrentWorkspace().getLastTemporaryOffset(0, true, Integer.MIN_VALUE);
             result.add(new Ajw(-offset));
 
             result.addAll(pushOps);
@@ -425,21 +426,21 @@ public class ASMGenerator {
             popOps = ASMGeneratorHelpers.processPops(retValsToPop, op, context, preProcess);
         }
 
-        int iPtrStoreLocation = context.getCurrentWorkspace().getNextTemporaryOffset();
+        int iPtrStoreLocation = context.getCurrentWorkspace().getNextTemporaryOffset(true, Integer.MIN_VALUE);
         context.getCurrentWorkspace().allocateTemporary();
         int r2StoreLocation = Integer.MIN_VALUE;
         if (context.getCurrentFunction().getReturnTypes().size() >= 3) {
-            r2StoreLocation = context.getCurrentWorkspace().getNextTemporaryOffset();
+            r2StoreLocation = context.getCurrentWorkspace().getNextTemporaryOffset(true, Integer.MIN_VALUE);
             context.getCurrentWorkspace().allocateTemporary();
         }
         int r1StoreLocation = Integer.MIN_VALUE;
         if (context.getCurrentFunction().getReturnTypes().size() >= 2) {
-            r1StoreLocation = context.getCurrentWorkspace().getNextTemporaryOffset();
+            r1StoreLocation = context.getCurrentWorkspace().getNextTemporaryOffset(true, Integer.MIN_VALUE);
             context.getCurrentWorkspace().allocateTemporary();
         }
         int r0StoreLocation = Integer.MIN_VALUE;
         if (context.getCurrentFunction().getReturnTypes().size() >= 1) {
-            r0StoreLocation = context.getCurrentWorkspace().getNextTemporaryOffset();
+            r0StoreLocation = context.getCurrentWorkspace().getNextTemporaryOffset(true, Integer.MIN_VALUE);
             context.getCurrentWorkspace().allocateTemporary();
         }
 
@@ -473,7 +474,7 @@ public class ASMGenerator {
                 //Copy rN...r3 to `size`
                 int rNDstOffset = context.getCurrentWorkspace().getSize() - 1;
                 if (context.getCurrentFunction().getReturnTypes().size() > 3) {
-                    int rNSrcOffset = context.getCurrentWorkspace().getLastTemporaryOffset(4 + context.getCurrentFunction().getReturnTypes().size() - 3 - 1);
+                    int rNSrcOffset = context.getCurrentWorkspace().getLastTemporaryOffset(4 + context.getCurrentFunction().getReturnTypes().size() - 3 - 1, true, Integer.MIN_VALUE);
                     for (int i = 0; i < context.getCurrentFunction().getReturnTypes().size()-3; i++, rNSrcOffset--, rNDstOffset--) {
                         result.add(new Ldl(rNSrcOffset));
                         result.add(new Stl(rNDstOffset));
@@ -552,9 +553,9 @@ public class ASMGenerator {
         context.initProcesses_ExpandedSizes.push(0);
 
         context.getCurrentWorkspace().allocateTemporary();
-        int processesCountOffset = context.getCurrentWorkspace().getLastTemporaryOffset(0);
+        int processesCountOffset = context.getCurrentWorkspace().getLastTemporaryOffset(0, true, Integer.MIN_VALUE);
         context.getCurrentWorkspace().allocateTemporary();
-        int continuePtrOffset = context.getCurrentWorkspace().getLastTemporaryOffset(0);
+        int continuePtrOffset = context.getCurrentWorkspace().getLastTemporaryOffset(0, true, Integer.MIN_VALUE);
 
         context.initProcesses_ProcCountOffsets.push(continuePtrOffset);
         context.initProcesses_ContinueOpIds.push(op.continueILOpID);
@@ -607,14 +608,17 @@ public class ASMGenerator {
         } else {
             // Code for process only
 
+            Workspace targetWS = context.getCurrentFunction().getWorkspaceById(newWorkspaceId);
+            targetWS.fixedParentOffset = context.initProcesses_ProcCountOffsets.peek();
+
             result = new ArrayList<>();
 
-            result.add(new Ldlp(context.initProcesses_ProcCountOffsets.peek()));
+            result.add(new Ldlp(targetWS.fixedParentOffset));
             result.add(new Stl(-context.getCurrentWorkspace().getExpansionAreaSize() - 1));
 
             String processLabelStr = context.generateILOpLabel(processStartOp);
             result.add(new Ldc(processLabelStr + "-$2"));
-            result.add(new Ldlp(-context.getCurrentWorkspace().getExpansionAreaSize() - context.getCurrentFunction().getWorkspaceById(newWorkspaceId).getInitSize()));
+            result.add(new Ldlp(-context.getCurrentWorkspace().getExpansionAreaSize() - targetWS.getInitSize()));
             result.add(new Startp());
         }
 
@@ -659,7 +663,7 @@ public class ASMGenerator {
             if (numProcessesToEnd == totalNumProcessesToEnd - 1) {
                 result.add(new Ldlp(context.initProcesses_ProcCountOffsets.peek()));
             } else {
-                result.add(new Ldl(context.getCurrentWorkspace().getOffset(Integer.MIN_VALUE)));
+                result.add(new Ldl(context.getCurrentWorkspace().getOffset(Integer.MIN_VALUE, true, Integer.MIN_VALUE)));
             }
             result.add(new Endp());
         }
@@ -1930,11 +1934,13 @@ public class ASMGenerator {
         } else {
             // Code for process only
 
+            ChannelDescriptor softChannelDescriptor = context.getChannel(op.index);
+
             result = new ArrayList<>();
             result.add(new Mint());
             result.addAll(pushOps);
             result.addAll(popOps);
-            result.add(new Stl(context.getCurrentWorkspace().getNthTemporaryOffset(context.getChannelOffset(op.index))));
+            result.add(new Stl(softChannelDescriptor.ownerWS.getNthTemporaryOffset(softChannelDescriptor.offset, true, Integer.MIN_VALUE)));
         }
 
         // Post-op code for both process and preprocess
@@ -1947,7 +1953,12 @@ public class ASMGenerator {
         // Pre-op code for both process and preprocess
         List<ASMOp> pushOps = ASMGeneratorHelpers.processPushes(1, op, context, preProcess);
 
-        List<ASMOp> result;
+        List<ASMOp> result = new ArrayList<>();
+
+        ChannelDescriptor softChannelDescriptor = context.getChannel(op.index);
+        int fixedOffset = ASMGeneratorHelpers.climbStaticChain(result, context.getCurrentWorkspace(), softChannelDescriptor.ownerWS, context);
+        boolean isLocal = fixedOffset == Integer.MIN_VALUE;
+
         if (preProcess) {
             // Code for preprocess only
 
@@ -1955,10 +1966,13 @@ public class ASMGenerator {
         } else {
             // Code for process only
 
-            result = new ArrayList<>();
             //TODO: Handle channel data type
             //TODO: External channels? result.add(new Channel(context.getChannel(op.index).getKey()));
-            result.add(new Ldlp(context.getCurrentWorkspace().getNthTemporaryOffset(context.getChannelOffset(op.index))));
+            if (isLocal) {
+                result.add(new Ldlp(softChannelDescriptor.ownerWS.getNthTemporaryOffset(softChannelDescriptor.offset, isLocal, fixedOffset)));
+            } else {
+                result.add(new Ldnlp(softChannelDescriptor.ownerWS.getNthTemporaryOffset(softChannelDescriptor.offset, isLocal, fixedOffset)));
+            }
             result.addAll(pushOps);
         }
 
@@ -1966,6 +1980,7 @@ public class ASMGenerator {
 
         return result;
     }
+
     private List<ASMOp> processLoadPortRef(LoadPortRef<Integer> op, ASMGeneratorContext<Integer, ILOp<Integer>> context, boolean preProcess) {
 
         // Pre-op code for both process and preprocess

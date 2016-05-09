@@ -31,18 +31,19 @@ public class ASMGeneratorHelpers {
         return distance;
     }
 
-    public static boolean climbStaticChain(List<ASMOp> result, Workspace currentWorkspace, Workspace ownerWorkspace, ASMGeneratorContext<Integer, ILOp<Integer>> context, boolean preProcess) {
+    public static int climbStaticChain(List<ASMOp> result, Workspace currentWorkspace, Workspace ownerWorkspace, ASMGeneratorContext<Integer, ILOp<Integer>> context) {
         // Calculate distance from current WS to owner WS in terms of WS jumps (i.e. static chain distance)
         int workspacesToClimb = ASMGeneratorHelpers.calculateStaticChainDistance(ownerWorkspace, currentWorkspace);
         // Whether the variable is local to the current WS or not
         boolean isLocal = workspacesToClimb == 0;
+        int fixedOffset = Integer.MIN_VALUE;
 
         // If not local, climb the static chain
         if (!isLocal) {
             Workspace tempWorkspace = currentWorkspace;
             for (int i = 0; i < workspacesToClimb; i++) {
                 // Parent workspace pointer is always held at max offset within the child workspace
-                int parentWSPtrOffset = currentWorkspace.getOffset(Integer.MIN_VALUE);
+                int parentWSPtrOffset = currentWorkspace.getOffset(Integer.MIN_VALUE, i == 0, fixedOffset);
 
                 if (i == 0) {
                     // Load local if starting from actual current workspace
@@ -55,10 +56,11 @@ public class ASMGeneratorHelpers {
                     result.add(new Ldnl(parentWSPtrOffset));
                 }
 
+                fixedOffset = currentWorkspace.fixedParentOffset;
                 tempWorkspace = tempWorkspace.getParent();
             }
         }
-        return isLocal;
+        return fixedOffset;
     }
 
     public static int getFullWorkspaceSize(ASMGeneratorContext<Integer, ILOp<Integer>> context, Scope wsScope) {
@@ -160,7 +162,8 @@ public class ASMGeneratorHelpers {
 
         List<ASMOp> result = new ArrayList<>();
 
-        boolean isLocal = ASMGeneratorHelpers.climbStaticChain(result, currentWorkspace, ownerWorkspace, context, preProcess);
+        int fixedOffset = ASMGeneratorHelpers.climbStaticChain(result, currentWorkspace, ownerWorkspace, context);
+        boolean isLocal = fixedOffset == Integer.MIN_VALUE;
 
         List<ASMOp> popOps;
 
@@ -198,7 +201,7 @@ public class ASMGeneratorHelpers {
 
             result.addAll(popOps);
 
-            int varWSOffset = ownerWorkspace.getOffset(itemIndex);
+            int varWSOffset = ownerWorkspace.getOffset(itemIndex, isLocal, fixedOffset);
 
             if (isLocal) {
                 if (!argument.getPassByValue()) {
@@ -229,7 +232,8 @@ public class ASMGeneratorHelpers {
 
         List<ASMOp> result = new ArrayList<>();
 
-        boolean isLocal = ASMGeneratorHelpers.climbStaticChain(result, currentWorkspace, ownerWorkspace, context, preProcess);
+        int fixedOffset = ASMGeneratorHelpers.climbStaticChain(result, currentWorkspace, ownerWorkspace, context);
+        boolean isLocal = fixedOffset == Integer.MIN_VALUE;
 
         List<ASMOp> popOps;
 
@@ -249,7 +253,7 @@ public class ASMGeneratorHelpers {
 
             result.addAll(popOps);
 
-            int varWSOffset = ownerWorkspace.getOffset(itemIndex);
+            int varWSOffset = ownerWorkspace.getOffset(itemIndex, isLocal, fixedOffset);
             if (isLocal) {
                 result.add(new Stl(varWSOffset));
             } else {
@@ -270,7 +274,8 @@ public class ASMGeneratorHelpers {
 
         List<ASMOp> result = new ArrayList<>();
 
-        boolean isLocal = ASMGeneratorHelpers.climbStaticChain(result, currentWorkspace, ownerWorkspace, context, preProcess);
+        int fixedOffset = ASMGeneratorHelpers.climbStaticChain(result, currentWorkspace, ownerWorkspace, context);
+        boolean isLocal = fixedOffset == Integer.MIN_VALUE;
 
         List<ASMOp> pushOps;
 
@@ -304,39 +309,11 @@ public class ASMGeneratorHelpers {
          *              [Load address of argument by doing <Ldnl X>]
          *
          *          ArgByValue
-         *              [Load address of argument by doing nothing extra]
+         *              [Load address of argument by doing <Ldnlp X>]
          *
          */
-        if (!loadAddress) {
-            if (isLocal) {
-                if (!argument.getPassByValue()) {
-                    pushOps = processPushes(1, currentOp, context, preProcess);
-                } else {
-                    pushOps = processPushes(1, currentOp, context, preProcess);
-                }
-            } else {
-                if (!argument.getPassByValue()) {
-                    pushOps = processPushes(1, currentOp, context, preProcess);
-                } else {
-                    pushOps = processPushes(1, currentOp, context, preProcess);
-                }
-            }
-        } else {
-            if (isLocal) {
-                if (!argument.getPassByValue()) {
-                    pushOps = processPushes(1, currentOp, context, preProcess);
-                } else {
-                    pushOps = processPushes(1, currentOp, context, preProcess);
-                }
-            } else {
-                if (!argument.getPassByValue()) {
-                    pushOps = processPushes(1, currentOp, context, preProcess);
-                } else {
-                    // Nothing extra
-                    pushOps = new ArrayList<>();
-                }
-            }
-        }
+
+        pushOps = processPushes(1, currentOp, context, preProcess);
 
         if (preProcess) {
             // Code for preprocess only
@@ -345,7 +322,7 @@ public class ASMGeneratorHelpers {
         } else {
             // Code for process only
 
-            int varWSOffset = ownerWorkspace.getOffset(itemIndex);
+            int varWSOffset = ownerWorkspace.getOffset(itemIndex, isLocal, fixedOffset);
 
             if (!loadAddress) {
                 if (isLocal) {
@@ -374,7 +351,7 @@ public class ASMGeneratorHelpers {
                     if (!argument.getPassByValue()) {
                         result.add(new Ldnl(varWSOffset));
                     } else {
-                        // Nothing extra
+                        result.add(new Ldnlp(varWSOffset));
                     }
                 }
             }
@@ -394,7 +371,8 @@ public class ASMGeneratorHelpers {
 
         List<ASMOp> result = new ArrayList<>();
 
-        boolean isLocal = ASMGeneratorHelpers.climbStaticChain(result, currentWorkspace, ownerWorkspace, context, preProcess);
+        int fixedOffset = ASMGeneratorHelpers.climbStaticChain(result, currentWorkspace, ownerWorkspace, context);
+        boolean isLocal = fixedOffset == Integer.MIN_VALUE;
 
         List<ASMOp> pushOps;
 
@@ -415,7 +393,7 @@ public class ASMGeneratorHelpers {
         } else {
             // Code for process only
 
-            int varWSOffset = ownerWorkspace.getOffset(itemIndex);
+            int varWSOffset = ownerWorkspace.getOffset(itemIndex, isLocal, fixedOffset);
             if (isLocal) {
                 if (loadAddress) {
                     result.add(new Ldlp(varWSOffset));
@@ -424,6 +402,8 @@ public class ASMGeneratorHelpers {
                 }
             } else if (!loadAddress) {
                 result.add(new Ldnl(varWSOffset));
+            } else {
+                result.add(new Ldnlp(varWSOffset));
             }
 
             result.addAll(pushOps);
@@ -451,7 +431,7 @@ public class ASMGeneratorHelpers {
             if (!preProcess) {
                 if (currentOp.storeResult(i)) {
                     context.getCurrentWorkspace().allocateTemporary();
-                    int offset = context.getCurrentWorkspace().getLastTemporaryOffset(0);
+                    int offset = context.getCurrentWorkspace().getLastTemporaryOffset(0, true, Integer.MIN_VALUE);
 
                     result.add(new Stl(offset));
                     context.popFromEvaluationStack();
@@ -496,7 +476,7 @@ public class ASMGeneratorHelpers {
                     case 0:
                         // Just load the items in order
                         for (int i = 0; i < numPops; i++) {
-                            int offset = context.getCurrentWorkspace().getLastTemporaryOffset(0);
+                            int offset = context.getCurrentWorkspace().getLastTemporaryOffset(0, true, Integer.MIN_VALUE);
                             context.getCurrentWorkspace().removeTemporaryFromWorkspace();
 
                             context.pushToEvaluationStack(-1, -1);
@@ -508,7 +488,7 @@ public class ASMGeneratorHelpers {
                     case 1:
                         // Load each item but reverse top 2 items after each in order to keep correct ordering
                         for (int i = 0; i < numPops-1; i++) {
-                            int offset = context.getCurrentWorkspace().getLastTemporaryOffset(0);
+                            int offset = context.getCurrentWorkspace().getLastTemporaryOffset(0, true, Integer.MIN_VALUE);
                             context.getCurrentWorkspace().removeTemporaryFromWorkspace();
 
                             context.pushToEvaluationStack(-1, -1);
@@ -529,7 +509,7 @@ public class ASMGeneratorHelpers {
                         {
                             result.add(new Stl(0));
 
-                            int offset = context.getCurrentWorkspace().getLastTemporaryOffset(0);
+                            int offset = context.getCurrentWorkspace().getLastTemporaryOffset(0, true, Integer.MIN_VALUE);
                             context.getCurrentWorkspace().removeTemporaryFromWorkspace();
 
                             context.pushToEvaluationStack(-1, -1);

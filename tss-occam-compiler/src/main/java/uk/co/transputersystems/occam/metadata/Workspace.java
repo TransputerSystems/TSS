@@ -19,6 +19,8 @@ public class Workspace {
 
     private int idGenerator = 0;
 
+    public int fixedParentOffset = 0;
+
     private int id;
     private transient Workspace parent;
 
@@ -130,7 +132,7 @@ public class Workspace {
                 }
 
                 //TODO: Deal with locals/args which are bigger than one word
-                wsl.offset = size++;
+                wsl.setOffset(size++);
             }
 
             lastItemIndex = wsl.itemIndex;
@@ -162,7 +164,7 @@ public class Workspace {
             }
 
             if (parentWSPtrWSL != null) {
-                parentWSPtrWSL.offset = size++;
+                parentWSPtrWSL.setOffset(size++);
             }
 
             size += numArgs - (parentWSPtrWSL != null ? 1 : 0);
@@ -174,7 +176,7 @@ public class Workspace {
                 }
 
                 if (wsl != parentWSPtrWSL) {
-                    wsl.offset = offset--;
+                    wsl.setOffset(offset--);
                 }
             }
         } else {
@@ -184,28 +186,28 @@ public class Workspace {
                 }
 
                 if (wsl.itemIndex == Integer.MIN_VALUE) {
-                    wsl.offset = size++;
+                    wsl.setOffset(size++);
                 }
             }
         }
     }
 
-    public int getLastTemporaryOffset(int distance) {
-        return (maxNumTemporaries - numTemporaries + 1 + distance); // Add one for WPtr+0 then add one to get from count value to index value
+    public int getLastTemporaryOffset(int distance, boolean local, int fixedOffset) {
+        return (maxNumTemporaries - numTemporaries + 1 + distance) - (local ? 0 : fixedOffset); // Add one for WPtr+0 then add one to get from count value to index value
     }
-    public int getNextTemporaryOffset() {
-        return (maxNumTemporaries - (numTemporaries+1)) + 1; // Add one for reserved location: WPtr+0
+    public int getNextTemporaryOffset(boolean local, int fixedOffset) {
+        return (maxNumTemporaries - (numTemporaries+1)) + 1 - (local ? 0 : fixedOffset); // Add one for reserved location: WPtr+0
     }
-    public int getOffset(int itemIndex) {
+    public int getOffset(int itemIndex, boolean local, int fixedOffset) {
         for (WorkspaceLocation wsl : locations) {
             if (wsl.itemIndex == itemIndex) {
-                return wsl.offset;
+                return wsl.getOffset(local ? 0 : fixedOffset);
             }
         }
         return -1;
     }
-    public int getNthTemporaryOffset(int n) {
-        return  (maxNumTemporaries - n) + 1;
+    public int getNthTemporaryOffset(int n, boolean local, int fixedOffset) {
+        return (maxNumTemporaries - n) - (local ? 0 : fixedOffset);
     }
 
     public Workspace getOwner(int itemIndex) {

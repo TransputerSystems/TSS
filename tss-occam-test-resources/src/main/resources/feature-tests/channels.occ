@@ -7,8 +7,8 @@ PROC init()
     CHAN OF INT c :
     INT a,b:
     SEQ
-        a := 2
+        a := #C0DEC0D0
         PAR
-            c ! a
+            c ! (a + 1)
             c ? b
 :
