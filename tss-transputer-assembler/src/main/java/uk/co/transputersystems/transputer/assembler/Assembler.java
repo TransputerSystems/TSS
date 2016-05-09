@@ -136,12 +136,16 @@ public class Assembler {
     /**
      * Convert an assembly file into object code.
      */
-    public static List<String> assemble(@Nonnull String input, @Nullable AssemblerConfig config, @Nonnull PrintStream logger) throws DuplicateLabelException {
+    public static List<String> assemble(@Nonnull String input, @Nullable AssemblerConfig config, @Nonnull PrintStream logger, boolean insertIOConfiguration) throws DuplicateLabelException {
         List<Instruction> assembly = parseAssembly(input);
 
         logger.println("== Assembly ==");
         // TODO: build printable representation
         logger.println(assembly);
+
+        if (insertIOConfiguration) {
+            assembly = insertIOConfiguration(assembly, config);
+        }
 
         List<Instruction> dollarSubstitutedAssembly = processDollarLabelOperands(assembly);
 

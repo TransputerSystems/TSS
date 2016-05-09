@@ -47,6 +47,8 @@ public class AssemblerApplication extends Application {
                 .ofType(File.class)
                 .describedAs("configuration");
 
+        OptionSpec insertIOConfigurationArg = optionParser.accepts("insert-io-configuration");
+
         try {
             OptionSet options = optionParser.parse(args);
 
@@ -59,7 +61,7 @@ public class AssemblerApplication extends Application {
 
             PrintStream logger = new PrintStream(System.out);
 
-            List<String> output = assemble(input, loadConfig(configFileReader), logger);
+            List<String> output = assemble(input, loadConfig(configFileReader), logger, options.has(insertIOConfigurationArg));
 
             FileWriter outputWriter = new FileWriter(outputFile);
             for (String line : output) {
