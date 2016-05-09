@@ -1996,7 +1996,7 @@ public class ASMGenerator {
 
             result = new ArrayList<>();
             //TODO: Handle port data type
-            result.add(new Ldc(op.name));
+            result.add(new Ldc("@" + op.name));
             result.addAll(pushOps);
         }
 
