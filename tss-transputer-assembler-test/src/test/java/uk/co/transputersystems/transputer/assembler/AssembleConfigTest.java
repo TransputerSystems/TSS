@@ -41,7 +41,7 @@ public class AssembleConfigTest {
         }
 
         String input = new Scanner(inputStream, "utf-8").useDelimiter("\\Z").next();
-        List<String> output = Assembler.assemble(input, Assembler.loadConfig(new InputStreamReader(configStream)), out);
+        List<String> output = Assembler.assemble(input, Assembler.loadConfig(new InputStreamReader(configStream)), out, true);
 
         assertTrue(output != null);
         assertTrue(output.size() > 0);
