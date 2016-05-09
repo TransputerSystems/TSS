@@ -94,17 +94,24 @@
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>uk.co.transputersystems.transputer.disassembler.DisassemblerApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>make-compiler-assembly</id>
+                        <id>make-disassembler-assembly</id>
                         <configuration>
-                            <finalName>occam-compiler</finalName>
+                            <finalName>transputer-disassembler</finalName>
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>uk.co.transputersystems.transputer.assembler.DisassemblerApplication</mainClass>
+                                    <mainClass>uk.co.transputersystems.transputer.disassembler.DisassemblerApplication</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
@@ -114,6 +121,18 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>uk.co.transputersystems.transputer.disassembler.DisassemblerApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-remote-resources-plugin</artifactId>
@@ -149,7 +168,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.4.0</version>
                 <configuration>
-                    <mainClass>uk.co.transputersystems.transputer.assembler.DisassemblerApplication</mainClass>
+                    <mainClass>uk.co.transputersystems.transputer.disassembler.DisassemblerApplication</mainClass>
                     <verbose>true</verbose>
                     <additionalAppResources>etc</additionalAppResources>
                 </configuration>
