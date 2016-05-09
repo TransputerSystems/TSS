@@ -1,6 +1,12 @@
 # Assembler
- 
-This document defines the assembly language accepted by our assembler.
+
+## Usage
+
+```
+./tas --input inputfile --output outputfile [--config configfile] 
+```
+
+Where `inputfile` is an input assembly file, `outputfile` is the path to output the binary to and `configfile` is an optional config yaml file.
 
 ## EBNF Grammar
 
@@ -133,3 +139,24 @@ DECREMENT:	ajw 		-0
 			ret
 END: -- exit program
 ```
+
+## Config
+
+You can bind labels to specific channels/ports using a config.
+
+### Example
+
+```
+processor:
+    processor_id: 0
+    connections:
+        - target_processor: 1
+          dest_port: 0
+          channel: channel0
+    iopins:
+        - addr: 70
+          channel: sensor
+          config: 0
+```
+
+You can use `sensor` and `channel0` as labels to refer to the `addr` and `dest_port`.
