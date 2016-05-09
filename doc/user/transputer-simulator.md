@@ -1,5 +1,16 @@
 # Simulator
 
+## Usage
+
+```
+./tsim --binaries=binary[;binary;binary...] --interactive --print-workspace-mem --verilog-testbench-gen=verilogfile --scheduler-test=schedulerfile --timer-test=timerfile
+```
+
+Where each `binary` is the path of a binary to execute.
+
+* `--interactive` - pause the simulator before execution starts to allow debugging
+* `--print-workspace-mem` - print the contents of workspaces before the simulator exits
+
 ## Debugger commands
 
 `<id>`: the id of a Transputer
