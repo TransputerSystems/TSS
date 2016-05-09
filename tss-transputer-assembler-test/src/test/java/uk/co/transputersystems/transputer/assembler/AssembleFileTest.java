@@ -11,9 +11,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import uk.co.transputersystems.transputer.assembler.config.AssemblerConfig;
+import uk.co.transputersystems.transputer.assembler.config.IOPin;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -48,7 +51,7 @@ public class AssembleFileTest {
      * @return true if the compilation appears to have succeeded, otherwise false.
      */
     public boolean testAssemblingFile(File file) throws Exception {
-        return testAssemblingFile(file, true);
+        return testAssemblingFile(file, true, Assembler.loadConfig(null));
     }
     /**
      * Given a file, attempt to parse and compile it to TSIL. Checks that the
@@ -58,7 +61,7 @@ public class AssembleFileTest {
      * @param verbose Whether to print debug output or not.
      * @return true if the compilation appears to have succeeded, otherwise false.
      */
-    public boolean testAssemblingFile(File file, boolean verbose) throws Exception {
+    public boolean testAssemblingFile(File file, boolean verbose, AssemblerConfig config) throws Exception {
         PrintStream out = new PrintStream(System.out);
 
         if (verbose) {
@@ -67,7 +70,7 @@ public class AssembleFileTest {
         }
 
         String input = new String(Files.readAllBytes(file.toPath()));
-        List<String> output = Assembler.assemble(input, Assembler.loadConfig(null), out);
+        List<String> output = Assembler.assemble(input, config, out);
 
         assertTrue(output != null);
         assertTrue(output.size() > 0);
@@ -190,7 +193,17 @@ public class AssembleFileTest {
     public void testPorts() throws Exception {
         String path = "/feature-tests/port.occ";
         File asmFile = testCompilingFile(getResource(path), path, "port.occ");
-        assertTrue(testAssemblingFile(asmFile));
+
+        AssemblerConfig assemblerConfig = new AssemblerConfig();
+        List<IOPin> pins = new ArrayList<>();
+        IOPin c1 = new IOPin();
+        c1.setChannel("c1");
+        c1.setConfig(1);
+        c1.setAddr(74);
+        pins.add(c1);
+        assemblerConfig.getProcessor().setIopins(pins);
+
+        assertTrue(testAssemblingFile(asmFile, true, assemblerConfig));
     }
 
     @Test
