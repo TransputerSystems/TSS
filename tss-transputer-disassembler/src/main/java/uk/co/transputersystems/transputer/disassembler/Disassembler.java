@@ -29,6 +29,7 @@ public class Disassembler {
 
         indirectOpcodes.put(0x00L, new Opcode(OpcodeType.INDIRECT, "rev", 0x00));
         indirectOpcodes.put(0x05L, new Opcode(OpcodeType.INDIRECT, "add", 0x05));
+        indirectOpcodes.put(0x1FL, new Opcode(OpcodeType.INDIRECT, "rem", 0x1F));
         indirectOpcodes.put(0x0CL, new Opcode(OpcodeType.INDIRECT, "sub", 0x0C));
         indirectOpcodes.put(0x53L, new Opcode(OpcodeType.INDIRECT, "mul", 0x53));
         indirectOpcodes.put(0x2CL, new Opcode(OpcodeType.INDIRECT, "div", 0x2C));
