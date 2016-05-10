@@ -1,0 +1,414 @@
+ldc 70
+ldc 0
+confio
+ldc 74
+ldc 1
+confio
+ldc 78
+ldc 1
+confio
+ldc 82
+ldc 1
+confio
+ldc 86
+ldc 1
+confio
+ldc 90
+ldc 1
+confio
+ldc 94
+ldc 1
+confio
+ldc 98
+ldc 1
+confio
+ldc 102
+ldc 1
+confio
+ajw -29
+ldc 0
+stl 28
+ldc 1
+stl 27
+ldc 0
+stl 25
+ldlp 25
+ldc 74
+ldc 4
+out
+ldc 1
+stl 24
+ldlp 24
+ldc 78
+ldc 4
+out
+ldc 1
+stl 23
+ldlp 23
+ldc 82
+ldc 4
+out
+ldc 1
+stl 22
+ldlp 22
+ldc 86
+ldc 4
+out
+ldc 1
+stl 21
+ldlp 21
+ldc 90
+ldc 4
+out
+ldc 1
+stl 20
+ldlp 20
+ldc 94
+ldc 4
+out
+ldc 1
+stl 19
+ldlp 19
+ldc 98
+ldc 4
+out
+ldc 1
+stl 18
+ldlp 18
+ldc 102
+ldc 4
+out
+ldc 0
+cj 770
+ldc 0
+cj 0
+diff
+ldlp 28
+ldc 70
+ldc 4
+in
+ldl 28
+ldc 0
+diff
+eqc 0
+eqc 0
+cj 616
+ldl 27
+ldc 0
+diff
+eqc 0
+eqc 0
+cj 540
+ldl 27
+ldc 1
+diff
+eqc 0
+eqc 0
+cj 464
+ldl 27
+ldc 2
+diff
+eqc 0
+eqc 0
+cj 388
+ldl 27
+ldc 3
+diff
+eqc 0
+eqc 0
+cj 312
+ldl 27
+ldc 4
+diff
+eqc 0
+eqc 0
+cj 236
+ldl 27
+ldc 5
+diff
+eqc 0
+eqc 0
+cj 160
+ldl 27
+ldc 6
+diff
+eqc 0
+eqc 0
+cj 84
+ldl 27
+ldc 7
+diff
+eqc 0
+eqc 0
+cj 0
+diff
+ldc 0
+stl 17
+ldlp 17
+ldc 102
+ldc 4
+out
+ldc 1
+stl 16
+ldlp 16
+ldc 98
+ldc 4
+out
+ldc 0
+stl 17
+ldlp 17
+ldc 102
+ldc 4
+out
+ldc 1
+stl 16
+ldlp 16
+ldc 98
+ldc 4
+out
+ldc 0
+cj 444
+diff
+ldc 0
+stl 15
+ldlp 15
+ldc 98
+ldc 4
+out
+ldc 1
+stl 14
+ldlp 14
+ldc 94
+ldc 4
+out
+ldc 0
+stl 15
+ldlp 15
+ldc 98
+ldc 4
+out
+ldc 1
+stl 14
+ldlp 14
+ldc 94
+ldc 4
+out
+ldc 0
+cj 382
+diff
+ldc 0
+stl 13
+ldlp 13
+ldc 94
+ldc 4
+out
+ldc 1
+stl 12
+ldlp 12
+ldc 90
+ldc 4
+out
+ldc 0
+stl 13
+ldlp 13
+ldc 94
+ldc 4
+out
+ldc 1
+stl 12
+ldlp 12
+ldc 90
+ldc 4
+out
+ldc 0
+cj 320
+diff
+ldc 0
+stl 11
+ldlp 11
+ldc 90
+ldc 4
+out
+ldc 1
+stl 10
+ldlp 10
+ldc 86
+ldc 4
+out
+ldc 0
+stl 11
+ldlp 11
+ldc 90
+ldc 4
+out
+ldc 1
+stl 10
+ldlp 10
+ldc 86
+ldc 4
+out
+ldc 0
+cj 258
+diff
+ldc 0
+stl 9
+ldlp 9
+ldc 86
+ldc 4
+out
+ldc 1
+stl 8
+ldlp 8
+ldc 82
+ldc 4
+out
+ldc 0
+stl 9
+ldlp 9
+ldc 86
+ldc 4
+out
+ldc 1
+stl 8
+ldlp 8
+ldc 82
+ldc 4
+out
+ldc 0
+cj 196
+diff
+ldc 0
+stl 7
+ldlp 7
+ldc 82
+ldc 4
+out
+ldc 1
+stl 6
+ldlp 6
+ldc 78
+ldc 4
+out
+ldc 0
+stl 7
+ldlp 7
+ldc 82
+ldc 4
+out
+ldc 1
+stl 6
+ldlp 6
+ldc 78
+ldc 4
+out
+ldc 0
+cj 134
+diff
+ldc 0
+stl 5
+ldlp 5
+ldc 78
+ldc 4
+out
+ldc 1
+stl 4
+ldlp 4
+ldc 74
+ldc 4
+out
+ldc 0
+stl 5
+ldlp 5
+ldc 78
+ldc 4
+out
+ldc 1
+stl 4
+ldlp 4
+ldc 74
+ldc 4
+out
+ldc 0
+cj 72
+diff
+ldc 0
+stl 3
+ldlp 3
+ldc 74
+ldc 4
+out
+ldc 1
+stl 2
+ldlp 2
+ldc 102
+ldc 4
+out
+ldc 0
+stl 3
+ldlp 3
+ldc 74
+ldc 4
+out
+ldc 1
+stl 2
+ldlp 2
+ldc 102
+ldc 4
+out
+ldc 0
+cj 10
+diff
+ldc 0
+cj 0
+diff
+ldl 28
+ldc 0
+diff
+eqc 0
+eqc 0
+cj 62
+ldl 27
+ldc 7
+diff
+eqc 0
+eqc 0
+cj 32
+ldc 1
+eqc 0
+cj 0
+diff
+ldl 27
+ldc 1
+add
+stl 27
+ldl 27
+ldc 1
+add
+stl 27
+ldc 0
+cj 26
+diff
+ldc 0
+stl 27
+ldc 0
+stl 27
+ldc 0
+cj 10
+diff
+ldc 0
+cj 0
+diff
+ldtimer
+stl 26
+ldl 26
+ldc 5000000
+sum
+stl 26
+ldl 26
+tin
+diff
+ldc 1
+eqc 0
+cj -772
+ajw 29
+ret

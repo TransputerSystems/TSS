@@ -1,0 +1,72 @@
+PROC init ()
+  PORT OF INT sensor :
+  PORT OF INT led0, led1, led2, led3, led4, led5, led6, led7 :
+  INT moved :
+  INT counter :
+  TIMER tim:
+  INT t:
+  SEQ
+    moved := 0
+    counter := 1
+    led0 ! 0
+    led1 ! 1
+    led2 ! 1
+    led3 ! 1
+    led4 ! 1
+    led5 ! 1
+    led6 ! 1
+    led7 ! 1
+
+    WHILE TRUE
+      SEQ
+        sensor ? moved
+        IF
+          moved = 0
+            SKIP
+          counter = 0
+            SEQ
+              led0 ! 0
+              led7 ! 1
+          counter = 1
+            SEQ
+              led1 ! 0
+              led0 ! 1
+          counter = 2
+            SEQ
+              led2 ! 0
+              led1 ! 1
+          counter = 3
+            SEQ
+              led3 ! 0
+              led2 ! 1
+          counter = 4
+            SEQ
+              led4 ! 0
+              led3 ! 1
+          counter = 5
+            SEQ
+              led5 ! 0
+              led4 ! 1
+          counter = 6
+            SEQ
+              led6 ! 0
+              led5 ! 1
+          counter = 7
+            SEQ
+              led7 ! 0
+              led6 ! 1
+
+        IF
+          moved = 0
+            SKIP
+          counter = 7
+            SEQ
+              counter := 0
+          TRUE
+            SEQ
+              counter := counter + 1
+
+        tim ? t
+        t := t PLUS 5000000
+        tim ? AFTER t
+:
