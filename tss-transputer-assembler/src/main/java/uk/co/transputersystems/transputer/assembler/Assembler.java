@@ -1,5 +1,6 @@
 package uk.co.transputersystems.transputer.assembler;
 
+import org.antlr.v4.runtime.misc.FlexibleHashMap;
 import uk.co.transputersystems.transputer.assembler.config.AssemblerConfig;
 import uk.co.transputersystems.transputer.assembler.config.Connection;
 import uk.co.transputersystems.transputer.assembler.config.IOPin;
@@ -173,7 +174,7 @@ public class Assembler {
         logger.println("== Assembly: label map built ==");
         logger.println(labelMappedAssembly.instructions);
 
-        Assembly patchedLabelAssembly = patchLabels(labelMappedAssembly, absoluteLabelMap);
+        Assembly patchedLabelAssembly = patchLabels(labelMappedAssembly);
 
         logger.println("== Label map: patched ==");
         for (Map.Entry<String, Long> entry : patchedLabelAssembly.labelMap.entrySet()) {
@@ -183,7 +184,11 @@ public class Assembler {
         logger.println("== Assembly: labels patched ==");
         logger.println(patchedLabelAssembly.instructions);
 
-        List<String> machineCode = translateToMachineCode(patchedLabelAssembly);
+        Assembly initJumpAssembly = addInitJump(patchedLabelAssembly);
+
+        Assembly finalAssembly = addAbsoluteLabels(initJumpAssembly, absoluteLabelMap);
+
+        List<String> machineCode = translateToMachineCode(finalAssembly);
 
         logger.println("== Machine code ==");
         logger.println(machineCode);
@@ -488,7 +493,7 @@ public class Assembler {
     /**
      * Perform prefixing/nfixing operations, updating the label match to reflect the inserted lines.
      */
-    public static Assembly patchLabels(Assembly assembly, Map<String, Long> absoluteLabelMap) {
+    public static Assembly patchLabels(Assembly assembly) {
         List<Instruction> updatedAssembly = new ArrayList<>();
         Map<String, Long> updatedLabelMap = new HashMap<>(assembly.labelMap);
 
@@ -546,9 +551,32 @@ public class Assembler {
 
         }
 
-        updatedLabelMap.putAll(absoluteLabelMap);
+        return new Assembly(updatedAssembly, updatedLabelMap);
+    }
+
+    private static Assembly addInitJump(Assembly assembly) {
+        List<Instruction> updatedAssembly = new ArrayList<>();
+        Map<String, Long> updatedLabelMap = new HashMap<>();
+
+        updatedAssembly.add(new Instruction(InstructionType.INSTRUCTION, null, opcodes.get("j"), null, "init", "jump to init", null, 0));
+
+        updatedAssembly.addAll(assembly.instructions);
+
+        // Push every label forward by 8 to compensate for the added jump
+        for (Map.Entry<String, Long> label : assembly.labelMap.entrySet()) {
+            updatedLabelMap.put(label.getKey(), label.getValue() + 8);
+        }
 
         return new Assembly(updatedAssembly, updatedLabelMap);
+    }
+
+    /**
+     * Add a set of labels to the label map.
+     */
+    private static Assembly addAbsoluteLabels(Assembly assembly, Map<String, Long> absoluteLabelMap) {
+        Map<String, Long> updatedLabelMap = new LinkedHashMap<>(assembly.labelMap);
+        updatedLabelMap.putAll(absoluteLabelMap);
+        return new Assembly(assembly.instructions, updatedLabelMap);
     }
 
     /**
