@@ -78,6 +78,7 @@ public class Assembler {
         opcodes.put("in", new Opcode(OpcodeType.INDIRECT, "in", 0x07));
         opcodes.put("out", new Opcode(OpcodeType.INDIRECT, "out", 0x0B));
         opcodes.put("outword", new Opcode(OpcodeType.INDIRECT, "outword", 0x0F));
+        opcodes.put("rem", new Opcode(OpcodeType.INDIRECT, "rem", 0x1F));
         opcodes.put("gcall", new Opcode(OpcodeType.INDIRECT, "gcall", 0x06));
         opcodes.put("gajw", new Opcode(OpcodeType.INDIRECT, "gajw", 0x3C));
         opcodes.put("ret", new Opcode(OpcodeType.INDIRECT, "ret", 0x20));
