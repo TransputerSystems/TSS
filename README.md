@@ -11,14 +11,14 @@ The tss Occam Toolchain allows you to compile and assemble Occam 2.1 for the Tra
 
 * Handles most of the Occam 2.1 language
 * No type checking
-* Incomplete IO support
+* Does not support external channels (a.k.a. links) but does support soft channels and IO Ports
 
 ### Assembler
 
 * Fully supports Transputer assembly
 * Supports OpenTransputer channel configuration
-* Produces binaries that run on the simulator
-* Does not yet produce binaries that run directly on the Transputer or OpenTransputer hardware
+* Produces binaries that run in the simulator
+* Produces binaries that run directly on OpenTransputer hardware
 
 ### Simulator
 
