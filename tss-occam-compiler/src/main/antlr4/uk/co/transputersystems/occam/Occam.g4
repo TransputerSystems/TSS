@@ -277,7 +277,7 @@ dyadic_operator
             | XOR
             | BITWISE_AND_KWD
             | GTHAN
-            |
+            | REM_KWD
             | EQUAL
             | BITOR
             | NOTEQ

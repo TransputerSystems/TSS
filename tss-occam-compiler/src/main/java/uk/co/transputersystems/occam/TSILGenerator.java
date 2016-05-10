@@ -1347,7 +1347,7 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
             ilBlock.add(new Subtract<>(UUID.randomUUID(),true , "Minus modulo"));
         } else if(ctx.TIMES_MOD() != null) {
             ilBlock.add(new Multiply<>(UUID.randomUUID(), true, ""));
-        } else if(ctx.REM() != null) {
+        } else if(ctx.REM() != null || ctx.REM_KWD() != null) {
             ilBlock.add(new Modulo<>(UUID.randomUUID(), ""));
         } else if(ctx.BITWISE_AND() != null){
             ilBlock.add(new BitwiseAnd<>(UUID.randomUUID(), ""));
@@ -1476,22 +1476,22 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
             Label<UUID> stmtLabel = new Label<>(UUID.randomUUID(), false, "");
 
             ILBlock<UUID,ILOp<UUID>> boolBlock = choiceBlocks.get(0);
-            ILBlock<UUID,ILOp<UUID>> stmtBlock = choiceBlocks.get(1);
+            List<ILBlock<UUID,ILOp<UUID>>> stmtBlocks = choiceBlocks.subList(1, choiceBlocks.size());
 
             //If true, branch to statement label
             boolBlock.add(new BranchIfTrue<>(UUID.randomUUID(), stmtLabel.getId(), ""));
 
             //Label marking start of statement
-            stmtBlock.add(0, stmtLabel);
+            stmtBlocks.get(0).add(0, stmtLabel);
             //Unconditional target to end of the structure
-            stmtBlock.add(new Branch<>(UUID.randomUUID(), endLabel.getId(), ""));
+            stmtBlocks.get(0).add(new Branch<>(UUID.randomUUID(), endLabel.getId(), ""));
 
             //We are visiting the choices in reverse
             //So add bool block to start of the list
             result.add(0, boolBlock);
 
             //Add a statement block to the end of the list
-            result.add(stmtBlock);
+            result.addAll(stmtBlocks);
 
             libraryInfo.popScope();
 
@@ -1502,7 +1502,7 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
 
         result.add(endBlock);
 
-        return result;
+        return new ILBlock<UUID,ILOp<UUID>>().mergeBlockList(result);
 
     }
 
@@ -1533,7 +1533,7 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
         //Add the List of ILBlocks from stmts and bools into a
         //single ILBlock<UUID,ILOp<UUID>> each.
         conditionBlock.appendBlockList(conditionBlocks);
-        statements = statements.get(0).mergeBlockList(statements);
+        statements = new ILBlock<UUID,ILOp<UUID>>().mergeBlockList(statements);
 
         result.add(conditionBlock);
         result.addAll(statements);
