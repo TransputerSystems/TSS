@@ -68,4 +68,8 @@
         </developer>
     </developers>
 
+    <build>
+        <defaultGoal>install</defaultGoal>
+    </build>
+
 </project>
