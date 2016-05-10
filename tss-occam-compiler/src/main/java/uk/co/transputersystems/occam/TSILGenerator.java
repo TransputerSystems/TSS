@@ -1347,7 +1347,7 @@ public class TSILGenerator extends OccamBaseVisitor<List<ILBlock<UUID,ILOp<UUID>
             ilBlock.add(new Subtract<>(UUID.randomUUID(),true , "Minus modulo"));
         } else if(ctx.TIMES_MOD() != null) {
             ilBlock.add(new Multiply<>(UUID.randomUUID(), true, ""));
-        } else if(ctx.REM() != null) {
+        } else if(ctx.REM() != null || ctx.REM_KWD() != null) {
             ilBlock.add(new Modulo<>(UUID.randomUUID(), ""));
         } else if(ctx.BITWISE_AND() != null){
             ilBlock.add(new BitwiseAnd<>(UUID.randomUUID(), ""));

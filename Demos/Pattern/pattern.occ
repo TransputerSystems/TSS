@@ -1,0 +1,66 @@
+PROC setSingleled (VAL INT led, VAL INT status)
+    PORT OF INT led0, led1, led2, led3, led4, led5, led6, led7 :
+
+    SEQ
+        led0 ! 0
+        led1 ! 0
+        led2 ! 0
+        led3 ! 0
+        led4 ! 0
+        led5 ! 0
+        led6 ! 0
+        led7 ! 0
+
+        IF
+            led = 0
+                SEQ
+                    led0 ! status
+            led = 1
+                SEQ
+                    led1 ! status
+            led = 2
+                SEQ
+                    led2 ! status
+            led = 3
+                SEQ
+                    led3 ! status
+            led = 4
+                SEQ
+                    led4 ! status
+            led = 5
+                SEQ
+                    led5 ! status
+            led = 6
+                SEQ
+                    led6 ! status
+            led = 7
+                SEQ
+                    led7 ! status
+            TRUE
+                SKIP
+:
+
+
+
+PROC init ()
+    INT old1 , old2 , res, targetLED , t:
+    TIMER tim:
+    SEQ
+        old1 := 1
+        old2 := 0
+
+        WHILE TRUE
+            SEQ
+                res := old1 + old2
+                targetLED := res REM 8
+                setSingleled(targetLED, 1)
+
+                old2 := old1
+                old1 := res
+
+                tim ? t
+                t := t PLUS 5000000
+                tim ? AFTER t
+
+
+:
