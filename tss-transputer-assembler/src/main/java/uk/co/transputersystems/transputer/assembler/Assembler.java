@@ -558,13 +558,14 @@ public class Assembler {
         List<Instruction> updatedAssembly = new ArrayList<>();
         Map<String, Long> updatedLabelMap = new HashMap<>();
 
-        updatedAssembly.add(new Instruction(InstructionType.INSTRUCTION, null, opcodes.get("j"), null, "init", "jump to init", null, 0));
+        // TODO: magic number 8!
+        updatedAssembly.add(new Instruction(InstructionType.INSTRUCTION, null, opcodes.get("j"), null, "init-8", "jump to init", null, 0));
 
         updatedAssembly.addAll(assembly.instructions);
 
         // Push every label forward by 8 to compensate for the added jump
         for (Map.Entry<String, Long> label : assembly.labelMap.entrySet()) {
-            updatedLabelMap.put(label.getKey(), label.getValue() + 8);
+            updatedLabelMap.put(label.getKey(), label.getValue() + 8); // TODO: magic number 8!
         }
 
         return new Assembly(updatedAssembly, updatedLabelMap);
