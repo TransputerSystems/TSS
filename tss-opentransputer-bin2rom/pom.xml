@@ -100,6 +100,17 @@
                     <useStandardDocletOptions>true</useStandardDocletOptions>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.zenjava</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>8.4.0</version>
+                <configuration>
+                    <mainClass>uk.co.transputersystems.open_transputer.rom.RomBuilderApplication</mainClass>
+                    <verbose>true</verbose>
+                    <additionalAppResources>etc</additionalAppResources>
+                    <vendor>TransputerSystems</vendor>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

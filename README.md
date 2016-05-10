@@ -46,3 +46,7 @@ This project relies on a number of excellent libraries.
 * Maven
 * pegdown-doclet
 * javafx-maven-plugin
+
+## Other tools
+
+You can install our [language-occam](https://atom.io/packages/language-occam) package for occam syntax highlighting in Atom.

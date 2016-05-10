@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+java -jar "tss-opentransputer-bin2rom-1.0-SNAPSHOT-jfx.jar" "$@"
