@@ -40,6 +40,8 @@ public class DisassemblerApplication extends Application {
                 .ofType(File.class)
                 .describedAs("transputer object code");
 
+        OptionSpec annotatedArg = optionParser.accepts("annotate-output");
+
         try {
             OptionSet options = optionParser.parse(args);
 
@@ -50,7 +52,7 @@ public class DisassemblerApplication extends Application {
 
             PrintStream logger = new PrintStream(System.out);
 
-            List<String> output = disassemble(input, logger);
+            List<String> output = disassemble(input, logger, options.has(annotatedArg));
 
             FileWriter outputWriter = new FileWriter(outputFile);
             for (String line : output) {

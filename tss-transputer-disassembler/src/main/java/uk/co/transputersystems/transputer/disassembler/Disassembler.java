@@ -3,6 +3,7 @@ package uk.co.transputersystems.transputer.disassembler;
 import javax.annotation.Nonnull;
 import java.io.OutputStream;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Disassembler {
@@ -93,15 +94,18 @@ public class Disassembler {
         indirectOpcodes.put(0x08L, new Opcode(OpcodeType.INDIRECT, "confio", 0x08));
     }
 
-    public static List<String> disassemble(@Nonnull String binary, @Nonnull OutputStream logger) {
+    public static List<String> disassemble(@Nonnull String binary, @Nonnull OutputStream logger, boolean annotateOutput) {
         String startAddress = Arrays.stream(binary.split("\\R")).findFirst().get();
         List<MachineInstruction> machineInstructions = Arrays.stream(binary.split("\\R"))
                 .skip(1)
                 .map(Disassembler::parseMachineInstruction)
                 .collect(Collectors.toList());
         List<AssemblyInstruction> assemblyInstructions = toAssemblyInstructions(machineInstructions);
+
+        Function<AssemblyInstruction, String> instructionPrinter = annotateOutput ? Disassembler::showAnnotatedAssemblyInstruction : Disassembler::showAssemblyInstruction;
+
         return assemblyInstructions.stream()
-                .map(Disassembler::showAssemblyInstruction)
+                .map(instructionPrinter)
                 .collect(Collectors.toList());
     }
 
@@ -147,6 +151,13 @@ public class Disassembler {
     }
 
     public static String showAssemblyInstruction(AssemblyInstruction instruction) {
+        return String.format(
+                "%6s %6s",
+                instruction.opcode.opcode,
+                (instruction.constantOperand == null ? "" : " " + instruction.constantOperand));
+    }
+
+    public static String showAnnotatedAssemblyInstruction(AssemblyInstruction instruction) {
         return String.format(
                 "%5d: %6s %6s     (length: %db)",
                 instruction.firstByteNumber,
