@@ -395,7 +395,7 @@ public class AssemblerTest {
         labelMap.put("jump", 7L);
         labelMap.put("end", 8L);
 
-        Assembly patchedAssembly = Assembler.patchLabels(new Assembly(instructions, labelMap), new LinkedHashMap<>());
+        Assembly patchedAssembly = Assembler.patchLabels(new Assembly(instructions, labelMap));
 
         checkInstructionEquality(
                 new Instruction(InstructionType.INSTRUCTION, "init", Assembler.opcodes.get("pfix"), 5L, null, null, null, 1),
