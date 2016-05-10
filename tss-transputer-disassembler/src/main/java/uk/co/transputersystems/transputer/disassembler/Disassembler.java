@@ -120,9 +120,10 @@ public class Disassembler {
     public static List<AssemblyInstruction> toAssemblyInstructions(List<MachineInstruction> machineInstructions) {
         List<AssemblyInstruction> assemblyInstructions = new ArrayList<>();
         long currentOperand = 0;
-        long lineNumber = 0;
+        long byteNumber = 0;
+        long beginningOfCurrentInstruction = 0;
         for (MachineInstruction machineInstruction : machineInstructions) {
-            lineNumber++;
+            byteNumber++;
             Opcode directOpcode = directOpcodes.get(machineInstruction.opcode);
             if ("pfix".equals(directOpcode.opcode)) {
                 currentOperand = (currentOperand | (machineInstruction.operand & 0xF)) << 4;
@@ -131,11 +132,13 @@ public class Disassembler {
             } else {
                 currentOperand = (currentOperand | (machineInstruction.operand & 0xF));
                 if ("opr".equals(directOpcode.opcode)) {
-                    assemblyInstructions.add(new AssemblyInstruction(indirectOpcodes.get(currentOperand), null, lineNumber));
+                    assemblyInstructions.add(new AssemblyInstruction(indirectOpcodes.get(currentOperand), null, beginningOfCurrentInstruction, byteNumber - beginningOfCurrentInstruction));
                     currentOperand = 0;
+                    beginningOfCurrentInstruction = byteNumber;
                 } else {
-                    assemblyInstructions.add(new AssemblyInstruction(directOpcode, currentOperand, lineNumber));
+                    assemblyInstructions.add(new AssemblyInstruction(directOpcode, currentOperand, beginningOfCurrentInstruction, byteNumber - beginningOfCurrentInstruction));
                     currentOperand = 0;
+                    beginningOfCurrentInstruction = byteNumber;
                 }
             }
         }
@@ -144,6 +147,11 @@ public class Disassembler {
     }
 
     public static String showAssemblyInstruction(AssemblyInstruction instruction) {
-        return instruction.opcode.opcode + (instruction.constantOperand == null ? "" : " " + instruction.constantOperand);
+        return String.format(
+                "%5d: %6s %6s     (length: %db)",
+                instruction.firstByteNumber,
+                instruction.opcode.opcode,
+                (instruction.constantOperand == null ? "" : " " + instruction.constantOperand),
+                instruction.sizeBytes);
     }
 }
