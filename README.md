@@ -4,6 +4,8 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2d1f5e7218a84a42bd07c20d3a7a9718)](https://www.codacy.com/app/github_63/TSS?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=TransputerSystems/TSS&amp;utm_campaign=Badge_Grade)
 
 The tss Occam Toolchain allows you to compile and assemble Occam 2.1 for the Transputer/OpenTransputer. It also includes a simulator for testing those programs.
+
+## [User documentation](doc/user)
  
 ## Project status
 

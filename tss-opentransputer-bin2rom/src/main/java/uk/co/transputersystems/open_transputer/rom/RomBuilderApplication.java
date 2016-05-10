@@ -20,14 +20,14 @@ public class RomBuilderApplication extends Application {
                 .withRequiredArg()
                 .required()
                 .ofType(File.class)
-                .describedAs("transputer assembly");
+                .describedAs("Transputer object code");
 
         OptionSpec<File> outputArg = optionParser
                 .accepts("output")
                 .withRequiredArg()
                 .required()
                 .ofType(File.class)
-                .describedAs("transputer object code");
+                .describedAs("OpenTransputer ROM");
 
         try {
             OptionSet options = optionParser.parse(args);
